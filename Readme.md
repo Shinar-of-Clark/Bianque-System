@@ -60,9 +60,9 @@ This project focuses on the three core assets of the smart distribution grid, pr
 ---
 
 ## 📚 References
-[1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. <https://doi.org/10.3390/s26061915>
+[1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. [https://doi.org/10.3390/s26061915](https://doi.org/10.3390/s26061915)
 
-[2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. <https://doi.org/10.5281/zenodo.20391481>
+[2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. [https://doi.org/10.5281/zenodo.20391481](https://doi.org/10.5281/zenodo.20391481)
 
 ---
 
