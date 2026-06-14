@@ -6,6 +6,23 @@
 
 **From Causal Auditing to Value Maximization: Individualized Management Guidelines for Smart Energy Assets**
 
+---
+
+## 📢 Latest Updates
+
+**[2026-06-13] Released PART 1: Underground Cables**
+> **Project Identity:** Laplace of Clark
+> **Author:** Yi Zeng
+> **Framework:** Laplace (Asymmetric Dual-Oracle Alignment)
+> 
+> 📄 **Manuscript PDF:** [Read the Full Paper Here](./PART_1/Part_I_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets—Underground_Cable_Management.pdf)
+> 🔬 **ResearchGate:** [From Causal Auditing to Value Maximization for Core Distribution Assets Collection](https://www.researchgate.net/publication/407033609_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Collection)
+> 🔗 **DOI:** [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20676445-blue)](https://doi.org/10.5281/zenodo.20676445)
+
+*   **Updates**:
+    1.  **Manuscript**: Published the complete preprint manuscript (*From Causal Auditing to Value Maximization for Core Distribution Assets—Part I*).
+
+---
 ## 🌟 Project Vision
 Predictive Maintenance (PdM) for modern energy assets (offshore wind farms, distribution grids) is undergoing a paradigm shift from "calendar-based population management" to "data-driven individualized management."
 The **Bianque System** aims to break the limitations of traditional black-box AI alarms, establishing an industrial, medical-grade asset management platform empowered by **Causal Auditing**, **Data-Driven Model Selection**, and **Value Maximization**.
@@ -14,7 +31,7 @@ The **Bianque System** aims to break the limitations of traditional black-box AI
 > **"Drawing upon the hardcore monitoring foundation of offshore wind, and leveraging the mathematical tools of survival algorithms for Remaining Useful Life (RUL), this system executes precise asset budget allocation prior to any service interruption. By practicing Bianque's original intention of 'treating the disease before it occurs', it ultimately maximizes the commercial value of the three core assets in the distribution grid: underground cables, switchgear/circuit breakers, and power transformers."**
 
 ## 🔬 Core Methodology: 6-Model Panel Diagnosis & Physical Discovery
-The underlying algorithm of this system refers to the taxonomy framework of Parametric Survival Models proposed in the review by Shadi et al. (2026), and deeply integrates the author's previous philosophy of "Physical Causal Auditing" (Zeng, 2026). It innovatively proposes the **"6-Model Panel Diagnosis"**.
+The underlying algorithm of this system refers to the taxonomy framework of Parametric Survival Models proposed in the review by Shadi et al. (2026) [1], and deeply integrates my previous philosophy of "Physical Causal Auditing" (Zeng, 2026) [2]. It innovatively proposes the **"6-Model Panel Diagnosis"**.
 
 1. **Comprehensive Testing**: Parallel implementation of 6 classical and extended parametric survival models (Weibull, Exponential, Gompertz, Log-normal, Log-logistic, Gamma).
 2. **Scientific Selection**: Empowering the data to autonomously select the optimal model based on Brier Score, Concordance Index (C-index), and Expected Calibration Error (ECE).
@@ -24,7 +41,7 @@ The underlying algorithm of this system refers to the taxonomy framework of Para
 ---
 
 ## 🏗️ Theoretical Foundation: Paradigm Heritage and Cross-Domain Migration
-This project is not built from scratch; it deeply inherits and expands upon the mature "Clark Paradigm" theoretical system previously constructed by the author in the offshore wind domain (Zeng, 2026). The prior research laid a profoundly physical foundation in the following three core dimensions, establishing a top-level paradigm of "pursuing absolute causality and commercial value" for this cross-domain study of distribution grid assets:
+This project is not built from scratch; it deeply inherits and expands upon the mature "Clark Paradigm" theoretical system previously constructed by me in the offshore wind domain (Zeng, 2026) [2]. The prior research laid a profoundly physical foundation in the following three core dimensions, establishing a top-level paradigm of "pursuing absolute causality and commercial value" for this cross-domain study of distribution grid assets:
 
 1. **Micro-physical Fingerprinting & Topological Monitoring**:
    In complex offshore environments involving wind-wave shear and wake effects, the prior framework discarded the superficial stacking of sensor data. Instead, it established an auditing system based on micro-electromagnetic features (e.g., sub-transient reactance, LCL resonance frequency) utilizing the inherent "0.3% high-precision manufacturing deviation" as a baseline, alongside a transient propagation delay tracking system based on submarine cables. This provides a rigorous methodological foundation for the current system to address deep-seated physical degradation in the distribution grid.
@@ -43,26 +60,34 @@ This project focuses on the three core assets of the smart distribution grid, pr
 
 > **💡 Roadmap Progression Logic and Reference Basis**
 > The progression of this research series adopts an upgrade strategy from "simple to deep, static to dynamic": starting from basic static degradation (cables), introducing mechanical wear and economic intervention decisions (switchgear), and ultimately challenging the extreme dynamic shock response of high-value core assets (transformers).
-> This progressively complex design references the taxonomy framework of survival models in sensor-enabled smart energy networks by Shadi et al. (2026) [1], ensuring the rigor of handling Censoring and time-varying covariates. Simultaneously, **this series of studies continues and expands the "From Causal Auditing to Value Maximization" framework previously established by the author in the offshore wind domain (Zeng, 2026) [2]**. By migrating its successful experience across domains, it elevates the focus of survival analysis from mere Remaining Useful Life (RUL) prediction to physical mechanism discovery and the resetting of individualized O&M economic value.
+> This progressively complex design references the taxonomy framework of survival models in sensor-enabled smart energy networks by Shadi et al. (2026) [1], ensuring the rigor of handling Censoring and time-varying covariates. Simultaneously, **this series of studies continues and expands the "From Causal Auditing to Value Maximization" framework previously established by me in the offshore wind domain (Zeng, 2026) [2]**. By migrating its successful experience across domains, it elevates the focus of survival analysis from mere Remaining Useful Life (RUL) prediction to physical mechanism discovery and the resetting of individualized O&M economic value.
 
-### 📝 Paper 1: Underground Cables
+### 📝 PART 1: Underground Cables 🟢 **[Published]**
 *   **Research Focus**: Time-varying risk auditing of chronic corrosion and multiple non-stationary factors.
 *   **Exploration Direction**: Validating whether factors such as water tree aging and partial discharge during long-term buried operation invalidate the traditional Weibull distribution, and searching for the survival curve most aligned with the chronic disease mechanism.
 
-### 📝 Paper 2: Switchgear / Circuit Breakers
+### 📝 PART 2: Switchgear / Circuit Breakers 🟡 **[Work in Progress]**
 *   **Research Focus**: Value reset evaluation of mechanical wear and preventive intervention (e.g., automation retrofitting).
 *   **Exploration Direction**: Challenging the inherent perception that "older means more prone to failure." Utilizing data to reveal whether switchgear exhibits an inverted U-shaped hazard rate (e.g., reaching a peak during mid-life due to specific wear), thereby demonstrating the optimal economic timing for mid-life overhauls.
 
-### 📝 Paper 3: Power Transformers
+### 📝 PART 3: Power Transformers ⚪ **[Planned]**
 *   **Research Focus**: Dynamic life-reduction prediction under the dual superimposition of industrial heavy loads (routine overload) and high-current shocks (transient inrush/short-circuit).
 *   **Exploration Direction**: Investigating which survival model's dynamic response can most accurately capture the non-linear degradation of winding deformation and insulation deterioration under the intertwined effects of "continuous thermal accumulation from routine overloads" and "severe electromagnetic mechanical stress shocks from transient high currents," thereby predicting "sudden cardiac arrest" style insulation breakdowns.
+
+### 📘 THE COLLECTION: The Master Framework 🚀 **[Upcoming]**
+*   **Publish Status**: To be released as the overarching whitepaper after all 3 Parts are validated.
+*   **Content Focus**: A comprehensive articulation of the underlying mathematical paradigm and unified closed-loop system of "Neural Cox + 6-Mirror Panel + Optimal Stopping Theory" across the entire distribution network asset ecosystem.
+
+---
+
+## 🙌 Acknowledgements
+In exploring the underlying survival algorithms for predictive maintenance of distribution network assets, this research was profoundly inspired by the team of **M. R. Shadi, H. Mirshekali, M. Tahavori, and H. R. Shaker** [1]. Their comprehensive review article provided a valuable taxonomic framework and theoretical guidance for survival models in sensor-enabled smart energy networks, laying a solid foundation for the "6-Model Panel Diagnosis" and algorithm selection mechanism of the Bianque System. We hereby express our most sincere respect and gratitude to their team.
 
 ---
 
 ## 📚 References
-[1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. [https://doi.org/10.3390/s26061915](https://doi.org/10.3390/s26061915)
-
-[2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. [https://doi.org/10.5281/zenodo.20391481](https://doi.org/10.5281/zenodo.20391481)
+[1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. https://doi.org/10.3390/s26061915
+[2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. https://doi.org/10.5281/zenodo.20391481
 
 ---
 
