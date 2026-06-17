@@ -1,6 +1,6 @@
 # 📝 PART 1: Underground Cables —— Time-Varying Risk and Chronic Degradation Auditing
 
-## 📄 Manuscript PDF ([PDF Download](./paper_1_draft_V2_EN.pdf))
+## 📄 Manuscript PDF ([PDF Download](./part_I_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets—Underground_Cable_Management.pdf))
 *   **Release Date**: 2026-06-13
 
 ## 📌 Methodology Heritage
@@ -58,3 +58,14 @@ Following the principle of "Data-Driven Model Selection":
 
 ---
 *"The superior doctor prevents sickness." —— The Bianque System: Auditing causality with data, foreseeing the future with algorithms.*
+
+---
+
+## 🙌 Acknowledgements
+In exploring the underlying survival algorithms for predictive maintenance of distribution network assets, this research was profoundly inspired by the team of **M. R. Shadi, H. Mirshekali, M. Tahavori, and H. R. Shaker** [1]. Their comprehensive review article provided a valuable taxonomic framework and theoretical guidance for survival models in sensor-enabled smart energy networks, laying a solid foundation for the "6-Model Panel Diagnosis" and algorithm selection mechanism of the Bianque System. We hereby express our most sincere respect and gratitude to their team.
+
+---
+
+## 📚 References
+[1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. https://doi.org/10.3390/s26061915
+[2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. https://doi.org/10.5281/zenodo.20391481
