@@ -1,0 +1,7 @@
+Feature,Hazard_Ratio,CI_Lower,CI_Upper
+Baseline Age (Natural Decay),1.1,1.02,1.18
+Core Temp Overload ($T_{core} > 90^\circ$C),1.85,1.6,2.1
+Environmental Humidity (>80%),1.45,1.2,1.7
+Harmonic THD (>5%),1.25,1.05,1.45
+Short-Circuit Impact ($I^2t$),2.6,2.2,3.0
+VLF Calibration Feedback Update,0.45,0.35,0.55

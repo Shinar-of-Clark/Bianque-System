@@ -10,6 +10,14 @@
 
 ## 📢 Latest Updates
 
+**[2026-06-15] Refined System Scope & PART 2 Blueprint**
+> **Evolution of Thought:** Establishing strict industrial boundaries to maximize ROI.
+*   **Updates**:
+    1.  **System Inclusion Criterion (High-Voltage Clearance Boundary)**: Formally established that the Bianque System targets *only* heavy primary assets (such as AIS and GIS) requiring **High-Voltage Clearance / Isolation**. Modular secondary/power-electronic equipment (e.g., Relays, SCADA, SVG) are explicitly scoped out, as their run-to-failure cost is minimal. This bridges algorithmic precision with real-world economic constraints.
+    2.  **PART 2 Expansion (The "Tale of Two Cities")**: Broadened the upcoming Switchgear research to introduce a parallel and independent asset class—**GIS (Chemical Pathology / SF6 Leakage)**—to be compared directly against **AIS (Mechanical Pathology / Mid-Life Crisis)**. This comparative study will showcase the 6-Mirror panel's ability to capture disparate physical degradation mechanisms.
+
+---
+
 **[2026-06-13] Released PART 1: Underground Cables**
 > **Project Identity:** Laplace of Clark
 > **Author:** Yi Zeng
@@ -29,6 +37,9 @@ The **Bianque System** aims to break the limitations of traditional black-box AI
 
 > **🎯 The Core Synthesis**
 > **"Drawing upon the hardcore monitoring foundation of offshore wind, and leveraging the mathematical tools of survival algorithms for Remaining Useful Life (RUL), this system executes precise asset budget allocation prior to any service interruption. By practicing Bianque's original intention of 'treating the disease before it occurs', it ultimately maximizes the commercial value of the three core assets in the distribution grid: underground cables, switchgear/circuit breakers, and power transformers."**
+
+> **⚖️ System Inclusion Criterion (High-Voltage Clearance Boundary)**
+> Not all equipment warrants complex survival analysis. The Bianque System strictly scopes its predictive targets to core primary assets that require **High-Voltage Clearance / Isolation** for maintenance. This boundary definition inherently filters out highly modular, low-voltage secondary/power-electronic equipment (e.g., protection relays, SCADA, SVG) where run-to-failure or hot-swapping incurs minimal downtime cost. By exclusively auditing heavy assets—where maintenance involves massive labor, critical grid reconfiguration, and exorbitant downtime penalties—this system bridges algorithmic precision with maximum real-world Return on Investment (ROI).
 
 ## 🔬 Core Methodology: 6-Model Panel Diagnosis & Physical Discovery
 The underlying algorithm of this system refers to the taxonomy framework of Parametric Survival Models proposed in the review by Shadi et al. (2026) [1], and deeply integrates my previous philosophy of "Physical Causal Auditing" (Zeng, 2026) [2]. It innovatively proposes the **"6-Model Panel Diagnosis"**.
@@ -67,8 +78,11 @@ This project focuses on the three core assets of the smart distribution grid, pr
 *   **Exploration Direction**: Validating whether factors such as water tree aging and partial discharge during long-term buried operation invalidate the traditional Weibull distribution, and searching for the survival curve most aligned with the chronic disease mechanism.
 
 ### 📝 PART 2: Switchgear / Circuit Breakers 🟡 **[Work in Progress]**
-*   **Research Focus**: Value reset evaluation of mechanical wear and preventive intervention (e.g., automation retrofitting).
-*   **Exploration Direction**: Challenging the inherent perception that "older means more prone to failure." Utilizing data to reveal whether switchgear exhibits an inverted U-shaped hazard rate (e.g., reaching a peak during mid-life due to specific wear), thereby demonstrating the optimal economic timing for mid-life overhauls.
+*   **Research Focus**: Dual-track physical discovery and dynamic retirement & precision life extension via RUL auditing under the "Tale of Two Cities" architecture.
+*   **Exploration Direction**: 
+    *   **AIS (Mechanical Pathology / Mid-Life Crisis)**: Challenging the inherent perception that "older means more prone to failure." Utilizing data to reveal whether switchgear exhibits an inverted U-shaped hazard rate (e.g., reaching a peak during mid-life due to specific wear), thereby demonstrating the optimal economic timing for mid-life overhauls.
+    *   **GIS (Chemical Pathology / Irreversible Aging)**: Utilizing models like Weibull to reveal the "monotonic continuous deterioration" law of SF6 gas micro-leakage caused by chemical seal aging.
+    *   **Dynamic Economic Intervention**: Based on the pioneering "10-Decile Sequential Soft-Threshold Calibration & Dual-Boundary" mechanism, incorporating survival probabilities into the Optimal Stopping Theory equations to precisely calculate the optimal economic critical point for "retrofit/VCB replacement vs. full cabinet replacement" alongside an absolute safety fuse line.
 
 ### 📝 PART 3: Power Transformers ⚪ **[Planned]**
 *   **Research Focus**: Dynamic life-reduction prediction under the dual superimposition of industrial heavy loads (routine overload) and high-current shocks (transient inrush/short-circuit).
