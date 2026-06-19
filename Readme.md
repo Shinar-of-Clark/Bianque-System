@@ -10,6 +10,24 @@
 
 ## 📢 Latest Updates
 
+**[2026-06-19] Released PART 2: Switchgear / Circuit Breakers**
+> **Project Identity:** Bianque of Clark
+> **Author:** Yi Zeng
+> **Framework:** Bianque (Causal Auditing & Survival Analysis)
+> 
+> 📄 **Manuscript PDF:** [Read the Full Paper Here](./PART_2/From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Part_II_Switchgear_Management.pdf)
+> 🔬 **ResearchGate:** [From Causal Auditing to Value Maximization for Core Distribution Assets Collection](https://www.researchgate.net/publication/407033609_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Collection)
+> 🔗 **DOI:** [TODO: Update DOI]
+> 
+> **Evolution of Thought:** Elevating algorithmic robustness by preemptively dropping noisy/transient indicators.
+*   **Updates**:
+    1.  **Manuscript Finalization**: The "Part II: Switchgear Management" LaTeX manuscript has been officially completed and formatted to IEEE standards. The system successfully integrates survival curves with Optimal Stopping Theory equations for ROI maximization.
+    2.  **Preemptive Rebuttal in Feature Selection**: Proactively excluded "Moisture Content (Micro-water)" and "Partial Discharge (PD)" from the survival analysis. Moisture was dropped because its temperature-induced noise destroys the monotonic convergence of the survival algorithm; PD was excluded because its sporadic, sudden-breakdown nature falls strictly under the homologous *Laplace Platform's* transient interception domain. The model solely relies on highly stable indicators (SF6 pressure drop and mechanical delays) to audit the irreversible hardware lifespan.
+    3.  **Refined P-Point Dual-Insurance Mechanism**: Streamlined the "Data + Time" dual-trigger mechanism. Once the observable physical covariate crosses the Potential Failure (P-point) threshold, the system immediately awakens the high-frequency predictive program, initiating the 10-Decile dynamic calibration and the absolute safety fuse (Grade 9) mechanism.
+
+---
+
+
 **[2026-06-15] Refined System Scope & PART 2 Blueprint**
 > **Evolution of Thought:** Establishing strict industrial boundaries to maximize ROI.
 *   **Updates**:

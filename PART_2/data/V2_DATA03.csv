@@ -1,0 +1,7 @@
+Model,AIS_C_Index,GIS_C_Index
+Cox-PH,0.65,0.68
+Exponential,0.58,0.71
+Weibull,0.72,0.94
+Lognormal,0.79,0.76
+Log-logistic,0.92,0.66
+RSF,0.88,0.89
