@@ -1,0 +1,1354 @@
+Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.
+Digital Object Identifier 10.1 109/ACCESS.2024.0429000
+Proactive Cable Replacement Planning Using
+Neural Weibull Proportional Hazard Modeling
+and Bayesian Nested Monte Carlo Simulation
+Under Data Deficiencies
+MOHAMMAD REZA SHADI 1, LASSE KAPPEL MORTENSEN 1, HAMID MIRSHEKALI 1, AND
+HAMID REZA SHAKER 1, (Senior Member, IEEE)
+1SDU Center for Energy Informatics, Maersk Mc-Kinney Moeller Institute, The Faculty of Engineering, University of Southern Denmark, 5230 Odense, Denmark
+Corresponding author: Mohammad Reza Shadi (mrsh@mmmi.sdu.dk)
+ABSTRACT The increasing failure rate of underground cable systems due to aging poses challenges for the
+reliable operation of power grids. Without proper asset management methods, the grid may not adequately
+support the ongoing climate-centered electrification of society. This highlights the need for strategic asset
+maintenance decision-making. While the existing literature includes inventive approaches for reliability
+modeling and maintenance strategy selection, there is still a gap in integrating detailed predictive analytics-
+based reliability modeling that accounts for common data deficiencies, alongside maintenance strategies that
+consider both reliability and cost-based performance indicators. In this paper, we present a comprehensive
+proactive cable replacement method using the Neural Weibull Proportional Hazard model, specifically
+designed to handle truncation and censoring mechanisms. The method employs a Bayesian nested Monte
+Carlo simulation to address the dual uncertainties associated with the probabilistic reliability model. We
+apply this maintenance simulation method to a case study of a real distribution system in Denmark. Our
+results indicate that the optimal replacement strategy reduces outage costs by up to 6.16 million DKK and can
+decrease the System Average Interruption Duration Index (SAIDI) by more than 50% compared to alternative
+replacement strategies. Finally, a sensitivity analysis of the maintenance budget shows that operators can
+reduce their annual budget for cable replacements by up to 50%, incurring only minor additional costs
+and an increase in peak SAIDI of just 1.5 minutes. The innovation lies in combining the NWPH model
+with Bayesian Monte Carlo simulation to handle incomplete records, quantify uncertainty, and guide cost-
+effective maintenance decisions.
+INDEX TERMS Asset Management, Failure Rate Prediction, Reliability-Centered Maintenance, SHAP ,
+Truncation and Censoring, Vulnerability Ranking, XAI.
+I. INTRODUCTION
+T
+HE existing fleet of medium- and low-voltage cables
+across Europe, encompassing millions of kilometers of
+cable, is aging, with substantial portions already exceeding
+their expected lifetimes [1]. Simultaneously, the growing
+adoption of electric mobility, electric heating, and renewable
+distributed energy resources such as solar photovoltaic sys-
+tems is expected to increase stress on the current infrastruc-
+ture. One Danish distribution system operator anticipates an
+increase of more than 200% in electricity consumption and
+more than 600% in electricity production within its service
+area over the next decade [2]. Similarly, electricity consump-
+tion is projected to rise significantly in many regions world-
+wide. Considering these trends, the need for reliable, data-
+driven asset maintenance decision-making tools for cable
+systems is greater than ever. For assets like cables, failure
+prediction and early fault detection are less practical due to
+the substantial size of the asset fleet and the high cost as-
+sociated with observability. Nevertheless, research into such
+applications for cable systems is ongoing, including partial
+discharge detection [3], thermal and corrosion modeling [4],
+and weather-related fault prediction [5]. However, these stud-
+ies are often experimental, and the methods typically do not
+differentiate between individual cables. Instead, prior studies
+typically assess failure risk at aggregated units entire feeders
+or network areas rather than at the individual-cable level,
+VOLUME 11, 2023 1
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+which limits their applicability to renovation planning [4]–
+[6].
+Some studies emphasize hierarchical decision-making. For
+instance, a two-step methodology in [7] first identifies critical
+feeders and then critical components using a weighted relia-
+bility index. Similarly, [8] proposed a three-stage reliability-
+centered maintenance framework involving feeder identifi-
+cation, failure mode ranking, and Mixed-Integer Linear Pro-
+gramming (MILP) to select maintenance strategies, reducing
+energy not supplied by 26%.
+Other studies focus directly on optimizing maintenance
+strategies using multi-criteria decision-making methods. [9]
+introduced an optimization technique combining gray rela-
+tion analysis and multi-criteria decision-making, achieving
+a 7% maintenance cost reduction by selecting neutral, cold-
+line, or hot-line strategies.
+However, these methodologies commonly lack predictive
+analytics for time-dependent failure rates and asset-specific
+features. While [10] employed multi-objective optimization
+via the epsilon-constraint method considering cost-based
+metrics, it did not address time-dependent failure rates.
+More comprehensive frameworks have explicitly incorpo-
+rated time-dependent failure rates. For example, [11] pre-
+sented a multi-period cable replacement planning method
+optimizing reliability indices using MILP and considering
+network expansions. However, detailed operational and envi-
+ronmental conditions or intrinsic asset features beyond cable
+length were overlooked.
+Other approaches balance operational and capital expen-
+ditures through innovative modeling. [12] utilized system
+dynamics optimized via a Weibull generalized process that
+incorporates imperfect maintenance scenarios. Similarly, [13]
+proposed a techno-economic framework integrating instal-
+lation and outage costs using a failure model combining
+Markov chains and failure distributions. Y et, both studies
+neglect operational and environmental conditions, intrinsic
+asset characteristics, and data limitations such as truncation
+and censoring.
+Several other studies have aimed for more detailed fail-
+ure modeling by correlating operational and environmental
+conditions with failure rates. For instance, [14] proposed a
+remaining useful life (RUL) estimation method for under-
+ground cables, using operational conditions and intrinsic asset
+features to determine an overall health index combined with
+statistical reliability modeling. Although effective in mod-
+eling aging trends, the approach did not account for failure
+consequences in maintenance interventions. Conversely, [15]
+combined a Weibull Proportional Hazard (WPH) model with
+an importance metric reflecting failure consequences to create
+a cable risk map, advising caution based on cable locations.
+Similarly, [16] used fuzzy risk assessment correlating geospa-
+tial data and Partial discharge data. However, these methods
+lack comprehensive consideration of data deficiencies and
+validation of maintenance impacts.
+Additional studies applied proportional hazard models and
+inventive reliability approaches. In [17], a proportional haz-
+ard model analyzed feature correlations with low voltage
+cable failures, providing insights but lacking failure conse-
+quence consideration and truncation accommodation. [18]
+and [19] integrated the Arrhenius relation with Weibull distri-
+butions; [18] studied reliability indices and thermal life loss,
+while [19] optimized replacement planning, incorporating
+distributed energy resources and network reconfigurations.
+However, both studies manually set Weibull parameters with-
+out utilizing actual failure data.
+Complementary Bayesian approaches in infrastructure also
+inform our setting: under extreme events, enhanced Hierar-
+chical Sparse Bayesian Learning has been used to interpret
+and forecast heteroscedastic SHM measurements with quan-
+tified uncertainty, illustrating robustness to volatile sensing
+conditions [20]. Likewise, Bayesian networks provide a flexi-
+ble, updateable framework for system-level reliability assess-
+ment in complex structures [21]. These works contextualize
+and support our Bayesian treatment of uncertainty adopted in
+this study.
+While many inventive approaches have been proposed,
+there remains a gap in the integrated consideration of pre-
+dictive analytics for data-driven reliability modeling, cost
+metrics, and reliability indices in strategic cable maintenance
+and replacement planning. Moreover, the current literature
+often overlooks the importance of addressing common data
+deficiencies such as censoring and truncation.
+To address these limitations, we propose a maintenance
+strategy selection method based on a Neural Weibull Pro-
+portional Hazard (NWPH) model, which incorporates op-
+erational and environmental conditions along with intrinsic
+cable features. The model’s likelihood function accommo-
+dates both truncation and censoring mechanisms. To handle
+the probabilistic nature of the NWPH model, the strategy
+selection process employs a Bayesian nested Monte Carlo
+simulation, using Bayesian bootstrap samples to represent
+parameter uncertainty.
+Beyond feeder-level ranking and MILP-based renewal
+planning, recent studies are moving toward deep survival or
+related time-to-failure learning. A temporal-CNN survival
+model predicts failure-time distributions for urban infras-
+tructure (including an electricity dataset), but it assumes
+rich sensing and predominantly right-censored data, not the
+left truncation and interval censoring common in utility
+records [22]. For grid equipment, a Bayesian deep-learning
+LSTM estimates transformer failure rates with uncertainty
+bands from condition data, yet it does not handle left trun-
+cation/interval censoring or connect predictions to plan-
+ning KPIs [23]. For transmission lines, a CNN-LSTM with
+TimeGAN targets remaining useful life rather than calibrated
+survival curves and likewise omits truncation/censoring treat-
+ment [24]. In contrast, our NWPH is designed for cable-
+level decisions: it maximizes the full likelihood with ex-
+plicit left truncation and right/interval censoring, learns non-
+linear asset-environment effects, and retains closed-form sur-
+vival/quantiles for SAIDI/SAIFI and outage-cost planning.
+Compared to neural Cox and deep survival baselines,
+2 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+neural Cox (partial likelihood) fits right-censored data but
+needs risk-set adjustments for left truncation and does not
+natively handle interval censoring. Discrete-time deep mod-
+els require time binning, making results grid-dependent and
+making sampling or quantiles harder. Fully nonparametric
+deep hazards can overfit and extrapolate poorly under heavy
+truncation and censoring [25]. NWPH instead maximizes the
+full likelihood with explicit truncation and censoring terms,
+retains closed-form survival and quantiles from the Weibull
+base, and integrates directly with our Bayesian nested Monte
+Carlo planner.
+The evaluated maintenance strategies consider both relia-
+bility and cost-based performance indicators. We apply the
+proposed simulation method to a case study involving a real
+10 kV Danish power distribution system. As a comparative
+overview, Table 1 highlights key differences between the
+proposed method and existing approaches in the literature.
+Prior studies either (i) operate above the asset level and do not
+model time-dependent failure at cable level [7]–[10]; (ii) use
+multi-period MILP but with sparse covariates (often beyond
+length) and limited operational/environmental detail [11];
+(iii) adopt system-dynamics/techno-economic models that
+omit intrinsic and environmental features and do not address
+truncation/censoring [12], [13]; (iv) estimate health/RUL or
+combine WPH with consequence yet do not integrate data-
+deficiency handling or quantify maintenance impacts [14]–
+[16]; (v) analyze L V failures with PH models without failure-
+consequence integration and without truncation accommoda-
+tion [17]; or (vi) couple Arrhenius with Weibull using man-
+ually set parameters not fit to failure data [18], [19]. In con-
+trast, we propose an NWPH model that captures non-linear
+asset and environment effects, corrects the likelihood for left-
+truncation and censoring, and is embedded in a Bayesian
+nested Monte Carlo planner that propagates dual uncertainties
+to outage-cost, SAIFI, and SAIDI metrics for strategy selec-
+tion.
+TABLE 1: Comparison between the proposed maintenance
+simulation method and existing approaches for cable prioriti-
+zation and reliability-centered maintenance.
+ReferenceTruncation Censoring Data-drivenParameter EstimationTime-DependentFailure RateEnvironmentalConditions
+[7] – – ✓ – –
+[8] – – – – –
+[9] – – – – –
+[10] – – ✓ – ✓
+[11] – – – ✓ –
+[12] – – ✓ ✓ –
+[13] – – ✓ ✓ –
+[18] – – ( ✓) ✓ ✓
+[19] – – ( ✓) ✓ ✓
+[26] – ✓ ✓ ✓ (✓)
+This paper ✓ ✓ ✓ ✓ ✓
+The contributions of this paper are as follows:
+• End-to-end planning pipeline : We propose a full
+pipeline for cable maintenance, from data preprocessing
+to strategy selection based on reliability modeling.
+• Neural Weibull Proportional Hazard model: A novel
+model combining neural networks with Weibull hazard
+functions to capture non-linear effects of asset and envi-
+ronmental features.
+• Data deficiency handling : The method explicitly ac-
+counts for truncation, censoring, and missing installation
+data using likelihood correction and weighting tech-
+niques.
+• Bayesian uncertainty quantification : A nested Monte
+Carlo approach with Bayesian bootstrapping captures
+both parameter and sampling uncertainties.
+• SHAP-based interpretability : SHAP analysis reveals
+key features influencing cable failure risk, enhancing
+model transparency.
+• Real-world validation: Applied to a Danish power grid,
+the method demonstrates strong cost-efficiency with
+minimal reliability trade-offs.
+II. METHODOLOGY
+This section presents the proposed method for proactive cable
+replacement planning. We first introduce the NWPH model,
+which estimates failure probabilities while explicitly handling
+data deficiencies such as truncation and censoring. We then
+describe how the model’s hazard and reliability functions
+are used to rank cables by their fault vulnerability. Finally,
+we outline the maintenance simulation framework, which
+integrates these reliability estimates into a Bayesian nested
+Monte Carlo procedure for evaluating maintenance strategies
+under uncertainty.
+A. NEURAL WEIBULL PROPORTIONAL HAZARD MODEL
+The Neural Weibull Proportional Hazard (NWPH) model is
+introduced as an extension of the classical Weibull Propor-
+tional Hazard (WPH) model, in which the linear covariate
+function is replaced with a neural network. This modification
+allows non-linear relationships between asset features and
+failure risk to be captured. The failure density, hazard rate,
+and reliability functions of the NWPH model are defined as:
+f (t) = λγ(λt)γ−1eg(z)e−(λt)γ eg(z)
+(1)
+h(t) = λγ(λt)γ−1eg(z) (2)
+R(t) = e−(λt)γ eg(z)
+(3)
+In these expressions, λ and γ represent the scale and shape
+parameters of the Weibull distribution, respectively. The func-
+tion g(z) denotes the output of the neural network given the
+covariate vector z.
+The covariate vector z collects cause-based features in
+two groups: (i) asset-specific (e.g., conductor material, in-
+sulation type, counts of joint), (ii) environmental (e.g., soil
+type/moisture, proximity to road classes, nearby excavation
+VOLUME 11, 2023 3
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+activity). All categorical attributes are one-hot encoded; con-
+tinuous attributes are scaled to [0, 1] prior to training to sta-
+bilize the likelihood.In the NWPH formulation, the relative-
+risk factor exp(g(z)) multiplies the Weibull baseline. The
+classical WPH model is recovered by setting a linear covariate
+function g(z) = β⊤z, i.e., keeping the same Weibull baseline
+(λ, γ) but replacing the neural link with a linear index. In con-
+trast, NWPH uses a non-linear gω(z) to capture interactions
+and non-linear effects, while training via the full likelihood
+with explicit contributions for right/interval censoring and
+inverse-reliability weighting for left truncation. The choice
+of a baseline Weibull failure distribution for cable reliability
+modeling is supported by the findings in [27], where failure
+data from multiple power distribution systems were analyzed.
+The reliability function is defined as the probability that
+an asset survives beyond time T , i.e., R(t, Z) = Pr( T > t).
+The failure density is expressed as the derivative of the life
+function F(t, Z) with respect to t, where the life function
+is given as the complement of the reliability function, i.e.,
+F(t, Z) = 1 − R(t, Z).
+1) Data Deficiencies
+This section addresses the challenges associated with in-
+complete failure data, which are common in power distri-
+bution systems. Specifically, it outlines how data censoring
+and truncation affect reliability modeling and how they are
+incorporated into the likelihood function.
+Estimating the parameters of a reliability model is typically
+carried out using maximum likelihood estimation, which be-
+comes straightforward when the failure time, T , is known for
+all observations. In such cases, the likelihood function is given
+by [28]:
+L(θ|t) = Pr(T = t|θ) = f (t, θ) (4)
+where θ denotes the set of model parameters, i.e., θ = λ, γ, ω,
+with ω representing the parameters of the neural network.
+We fit θ by maximizing the full log-likelihood in Eq. (4),
+which includes uncensored, right-censored, and interval-
+censored terms and corrects left truncation by dividing each
+contribution by R(y) (the reliability at the observation start).
+Inputs are Min–Max scaled to [0, 1], and gradients are
+clipped at 0.1 for stability. We use AdamW (lr 10−3, β =
+(0.9, 0.999)), initialize (λ, γ) via an iterative 50 × 50 grid
+search over [10−3, 1] × [1, 9] with g(z) ≡ 0 (Algorithm 1),
+and clamp λ ≥ 10−3, γ ≥ 1.1 during training. Early stopping
+evaluates the training loss every 50 epochs (patience 250; max
+5000).
+However, in practice, failure times for many assets are
+not observed, most commonly because the asset has not yet
+failed during the observation period. When the exact failure
+time is not known, the data is said to be censored. Four
+types of censoring are typically distinguished (including the
+uncensored case), as outlined below:
+1) Uncensored: The failure time is observed exactly and
+is known to be equal to some time T = t.
+2) Left-censored: The failure time is only known to have
+occurred before a certain time, i.e., T < t.
+3) Right-censored: The failure time is only known to
+have occurred after a certain time, i.e., T > t.
+4) Interval-censored: The failure time is known to lie
+between two time points, tl < T < tr , where tl and
+tr denote the lower and upper bounds of the interval
+within which the failure occurred.
+In addition to censoring mechanisms, an important source
+of bias in reliability and survival models is truncation,
+with left-truncation being particularly relevant [29]. Left-
+truncation occurs when assets are not observed from the
+time they become at risk, which typically corresponds to
+their installation. This situation often arises in systems where
+maintenance records have not been maintained since the ini-
+tial deployment of assets. As a result, early failures are not
+captured, and assets that are older or associated with a higher
+relative risk are underrepresented in the dataset. These assets
+are also more likely to fail, making their absence from the
+data especially problematic.
+2) Parameter Estimation under Censoring and Truncation
+When failure times are not fully observed, the likelihood
+function must be adjusted to reflect the type of censoring or
+truncation present in the data. For left-censored observations,
+the likelihood is defined as [28]:
+L(θ | t) = Pr(T < t | θ) = 1 − R(t | θ) (5)
+For right-censored observations, the likelihood is expressed
+as
+L(θ | t) = Pr(T > t | θ) = R(t | θ) (6)
+For interval-censored observations, the likelihood is given by
+L(θ | t) = Pr(tl < T < tr | θ) = R(tl | θ) − R(tr | θ) (7)
+Left-truncation is accounted for by applying inverse reliabil-
+ity weighting, where each likelihood contribution is divided
+by R(y), with y denoting the age at which observation of the
+asset began [28].
+By combining these expressions, the overall likelihood
+function is defined as
+L(θ | t) =
+Y
+i∈u.c.
+f (ti | θ)
+R(yi | θ) ·
+Y
+j∈r.c.
+R(tj | θ)
+R(yj | θ)
+·
+Y
+k∈i.c.
+R(tk,l | θ) − R(tk,r | θ)
+R(yk | θ) (8)
+where u.c., r.c., and i.c. refer to the sets of uncensored, right-
+censored, and interval-censored observations, respectively.
+4 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+3) Optimizing the Log-Likelihood Loss Function
+To train the NWPH model effectively, a loss function based
+on the log-likelihood is used, which measures how well the
+model explains the observed failure data, even when some
+events are only partially known due to censoring or trun-
+cation. To maximize the likelihood, a logarithmic transfor-
+mation is first applied. The resulting log-likelihood function
+serves as the basis for training the parameters of the NWPH
+model using gradient-based optimization. In this process,
+parameters are iteratively updated based on the partial deriva-
+tives of the loss with respect to each parameter, aiming to
+minimize the negative log-likelihood.
+However, as the likelihood approaches zero, the gradients
+can become extremely large, which may destabilize training.
+To mitigate this issue, a scaled version of the loss function is
+employed, similar to the approach adopted in [30]:
+LL∗(θ | t) = 1
+N ln(L(θ | t)) (9)
+where N denotes the batch size. Since large-magnitude co-
+variates can cause the likelihood to approach zero at initializa-
+tion, covariates are scaled to the range [0, 1] prior to training.
+Despite this, the loss remains sensitive to the parameterization
+of the model.
+It was observed that, on occasion, a gradient update may
+lead to a region in the parameter space where the loss becomes
+numerically unstable or diverges to infinity. To address this
+and improve training robustness, gradient clipping is applied.
+This technique limits the magnitude of the gradients, thereby
+preventing abrupt changes in parameter values and ensuring
+stable convergence.
+4) Hazard Initialization
+Although loss scaling and gradient clipping improve the ro-
+bustness of the training process, they often lead to slower
+convergence. To address this issue, an initialization heuristic
+is introduced, as outlined in Algorithm 1. This heuristic per-
+forms an iterative, grid-based search to find suitable initial
+values for the Weibull scale (λ) and shape (γ) parameters that
+best align with the observed data.
+B. RELIABILITY PREDICTION FRAMEWORK
+The joint objectives of the proposed NWPH model, which are
+to estimate asset reliability and rank assets based on relative
+fault vulnerability, are achieved using the framework de-
+signed for this study illustrated in Figure 1. Each component
+of the framework is described in the following subsections,
+with algorithmic procedures provided where appropriate.
+The steps related to model training, including hazard ini-
+tialization and gradient-based likelihood optimization, have
+already been described in the previous section. In contrast, the
+inference phase refers to the direct application of the trained
+NWPH model. Using equations 2 and 3, the failure rate and
+reliability of each asset can be computed. By ranking the
+assets based on these metrics, their relative vulnerability to
+failure can be assessed. This ranking helps identify the assets
+Algorithm 1: Initialization of Baseline Hazard
+Given: Grid size, gz, dataset, D, maximum iterations,
+itmax and initial range of λ be [λmin, λmax] and γ be
+[γmin, γmax]
+let Γ = {γmin, ..., γmax}, and Λ = {λmin, ..., λmax} be
+evenly distributed sets with cardinalities, |Γ| = gz
+and |Λ| = gz
+LL∗
+previous ← ∞
+for j ← 2 to itmax do
+γbest , λbest ← argmin
+γ∈Γ,λ∈Λ
+LL∗(λ, γ, D)
+LL∗
+min ← LL∗(λbest , γbest , D) // Set g(Z) = 0
+when evaluating the loss
+∆γ ← γmax −γmin
+2
+∆λ ← λmax −λmin
+2
+Γ ← {γbest − ∆γ, ..., γbest + ∆γ} where |Γ| = gz
+Λ ← {λbest − ∆λ, ..., λbest + ∆λ} where |Λ| = gz
+if LL∗
+previous = LL∗
+min then
+Exit for loop
+LL∗
+previous = LL∗
+min
+return λbest , λbest
+Maintenance 
+Records
+Process Intrinsic 
+Asset Features 
+Network GIS
+Smart Meter 
+Data
+Process Loading 
+Features 
+Topology 
+Data
+Process Environmental 
+Feature
+Environmental 
+Feature GIS
+Dataset
+Initialize Weibull Scale 
+and Shape Parameters
+Train NWPH
+Predict Hazard Rates and 
+Reliability 
+Rank Assets
+Create Dataset
+Training
+Inference
+preprocessed features z; truncation 
+y; censoring (δ,I); splits
+fitted parameters 𝜃=(𝜆,𝛾,𝜔); 
+bootstrap samples
+FIGURE 1: Framework for the application of the NWPH
+model, consisting of three stages: data preparation, model
+training, and inference.
+that are most at risk and supports proactive maintenance
+planning.
+1) Reconstructing Cable States for Reliability Modeling
+A critical step in the framework is accurately representing ca-
+ble conditions that influence fault vulnerability. This includes
+reconstructing the original state of cables that have experi-
+enced failures and undergone repairs. Without reconstruction,
+the model may incorrectly associate signs of a repair such as
+new joints or shortened length, with an increased failure risk.
+Reconstruction is performed manually based on the
+recorded failure dates and the installation times of individual
+cable segments. These are used to determine which parts of
+the cable must be restored to reflect their pre-failure state.
+Historical information, including the cable layout and orig-
+inal joints, is retrieved from a database of decommissioned
+VOLUME 11, 2023 5
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+assets. When a cable fails due to a short circuit, it is either
+entirely replaced or only the damaged section is removed
+and substituted with a new segment of polyethylene (PEX)
+cable. Following a repair, the remaining segments that were
+not replaced are treated as new assets in a condition equivalent
+to as-bad-as-old.
+Missing installation years were imputed with a conserva-
+tive default of 1990, reflecting the median of the undocu-
+mented installation period. For cables with incomplete repair
+or joint records, missing values were treated as zero, con-
+sistent with operator practice that undocumented joints are
+assumed absent. Interval-censored failure ages were imputed
+with default bounds ( t = 32 , tl = 5 , tr = 60 ) to ensure
+model compatibility. Missing censoring indicators were set to
+0 (no censoring). While these imputations are rule-based, the
+Bayesian bootstrap in our simulation propagates uncertainty
+in failure times, thereby preventing overconfidence in the
+estimates.
+2) Cause-Based Fault Features
+Given the limited observability in medium-voltage power
+distribution systems, the dataset is not constructed to empha-
+size symptom-based fault features such as partial discharges
+resulting from insulation degradation. Instead, the focus is on
+features related to the initial causes of cable deterioration.
+These cause-based features serve as proxies for the under-
+lying degradation mechanisms and fall into three main cat-
+egories: environmental, loading-related, and asset-specific.
+Notably, environmental and asset features require less so-
+phisticated internal data collection from utility companies,
+making them more practical for widespread implementation.
+a: Environmental Features
+Environmental features describe the external conditions sur-
+rounding a cable, such as soil type, moisture level, proximity
+to roads, and nearby excavation activity. These factors are
+known to influence underground cable failure rates. While
+detailed physical degradation models are unavailable, statisti-
+cal and machine learning approaches can capture correlations
+between such environmental conditions and failure likeli-
+hood. To convert environmental data into usable features, the
+geometric nature of each data type is considered.
+b: Asset Features
+Asset features include properties such as conductor material,
+insulation material, and joint types, which are extracted di-
+rectly from the asset database with minimal preprocessing.
+Among these, joint information requires some processing,
+specifically, the number of joints of each type connected to
+a cable’s endpoints is computed and used as input features.
+C. MAINTENANCE STRATEGY SIMULATION
+This section presents a simulation framework for evaluating
+maintenance strategies based on the NWPH model in the con-
+text of cable renewal. A maintenance strategy is defined by its
+reactive and proactive interventions. Reactive interventions
+occur after a failure and determine whether the failed cable
+is fully replaced or only repaired i.e., replacing the damaged
+segment while keeping the rest in service. Proactive interven-
+tions are executed before failure and involve the preventive
+replacement of cables.
+Accordingly, we define a reactive strategy governed by a
+threshold ωNOPF for the maximum allowed number of past
+failures. Additionally, a cable is replaced if its remaining
+length after repair falls below ωlength, representing a practical
+limit for keeping short cable segments in operation.
+The proactive strategy determines which cables should be
+replaced in advance. A central aspect of this strategy is the
+ranking metric used to prioritize replacements. The mainte-
+nance planner considers the following ranking metrics:
+1) Naïve: Random cable ranking.
+2) Vulnerability: Cables ranked by hazard rate divided by
+replacement cost.
+3) Consequence: Cables ranked by number of interrupted
+consumers per unit cost.
+4) Risk: Cables ranked by the product of hazard rate and
+number of consumers affected, divided by replacement
+cost.
+Proactive replacements proceed by selecting the lowest-
+ranked cables whose replacement costs do not exceed the
+remaining maintenance budget, continuing until the budget
+is exhausted. Figure 2 illustrates the maintenance planner
+process. At each step, failures are first identified by sampling
+failure times using the quantile function of the trained NWPH
+model, expressed as:
+t(q) = − 1
+λ
+ 1
+eg(z) ln (1 − q)
+ 1
+γ
+(10)
+In this formulation, q ∼ U(1 − R(a|θ), 1), where U denotes
+the uniform distribution and a is the current age of the asset.
+The lower bound 1 − R(a|θ) ensures that only failure times
+occurring after the current age are sampled, reflecting that
+the asset has already survived a years. After sampling failure
+times for all assets, those with failure times falling within
+the current time step are marked as failed. These failures are
+then resolved according to the reactive maintenance strategy,
+as shown on the left side of Figure 2. Once all failures
+are addressed, proactive cable replacements are performed
+following the ranking strategy depicted on the right side of
+the flowchart.
+1) Dual Uncertainties
+The simulation incorporates two key uncertainties: the vari-
+ability in the NWPH model parameters and the randomness
+of failure time sampling. To address both, a Bayesian nested
+Monte Carlo scheme is applied, as illustrated in Figure 3. In
+the outer loop, the NWPH model is retrained using Bayesian
+bootstrapping, which assigns random weights to training sam-
+ples via a Dirichlet distribution, capturing parameter uncer-
+tainty. In the inner loop, each maintenance strategy is sim-
+ulated multiple times to account for the stochastic nature
+6 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+Sort Cables in Descending Order by 
+Ranking Metric
+Start Year j = 0
+Determine Which 
+Assets Fail in Step sⱼ
+Replace Asset
+Y
+Sample Length of 
+Residual Cable Piece 
+and Reduce Length 
+of Cable Accordingly 
+Inset Residual Cable 
+in Asset Database. 
+Update both Cables’ 
+Asset Features
+Update Intrinsic 
+Asset Feature
+Sample Failure 
+Times of New or 
+Changed Assets
+𝒊 = 𝟏
+𝒊 += 𝟏
+𝒋 += 𝟏
+End
+Initialization
+• Load Asset Database
+• Load Yearly Maintenance 
+Budget (b) 
+𝑵𝑶𝑷𝑭 < 𝝎𝑵𝑶𝑷𝑭
+Y
+Y
+Y
+Y
+N
+NN
+N 𝑳𝒆𝒏𝒈𝒕𝒉 𝒐𝒇 𝑪𝒂𝒃𝒍𝒆
+< 𝝎𝒍𝒆𝒏𝒈𝒕𝒉
+𝑺𝒉𝒐𝒓𝒕 𝑪𝒊𝒓𝒄𝒖𝒊𝒕 𝒂𝒕
+𝑬𝒏𝒅 𝒐𝒇 𝑪𝒂𝒃𝒍𝒆?
+Subtract 
+Repair and 
+Replacement 
+Costs from 
+Budget, 𝒃𝒋
+𝒊 = 𝟏, 𝒏𝒓𝒆𝒑𝒍 = 𝟎, 𝑪𝑴𝒂𝒊𝒏𝒕𝒆𝒏𝒂𝒏𝒄𝒆 = 𝟎
+𝑪𝑴𝒂𝒊𝒏𝒕𝒆𝒏𝒂𝒏𝒄𝒆 += 𝑪𝒊
+≤ 𝒃𝒋?
+𝒏𝒓𝒆𝒑𝒍 = 𝟎?
+𝑹𝒆𝒑𝒍𝒂𝒄𝒆 𝑪𝒂𝒃𝒍𝒆 𝒊,
+𝑪𝑴𝒂𝒊𝒏𝒕𝒆𝒏𝒂𝒏𝒄𝒆 += 𝑪𝒊,
+𝑪𝒊 = ∞ 𝒂𝒏𝒅
+𝒏𝒓𝒆𝒑𝒍 += 𝟏
+N
+Cable 𝑖 Exists?
+Y
+N
+N
+N
+Reactive 
+Maintenance
+All Cables 
+Processed? 
+Proactive 
+Maintenance
+FIGURE 2: Flowchart of the maintenance simulation. The left side covers reactive interventions (resolving failures), while the
+right side covers proactive replacements based on planning and ranking.
+of failures and estimate the distribution of key performance
+indicators (KPIs), such as outage costs and number of failures.
+To ensure fair comparison and reduce computational cost, the
+same set of models from the outer loop is used across all
+strategies.
+FIGURE 3: Bayesian nested Monte Carlo scheme for the ap-
+plication of the simulation to consider the dual uncertainties
+of the NWPH model, i.e., the NWPH model’s parameters and
+the probabilistic nature of the NWPH model.
+III. CASE STUDY
+The proposed methodology is applied to a Danish 10 kV
+power distribution network, illustrated in Figure 4. The main-
+tenance and outage records used in this case study were
+provided by the Danish distribution system operator under
+a data-use agreement. Under this agreement, the underly-
+ing records cannot be publicly shared or redistributed. From
+2016 to 2022, the grid experienced over 90 cable-related
+interruptions, as documented in the operator’s maintenance
+records. Only failures attributed to aging or material degrada-
+tion were included, while those caused by excavation or other
+unpredictable factors were excluded. The network comprises
+a mix of cable types: PEX cables, primarily installed from
+the 1990s onward, and older paper-insulated lead-covered
+(PILC/APB) cables, installed before 1990. The grid operator,
+is actively replacing APB cables, which exhibit significantly
+higher failure rates due to their advanced age and shorter
+expected service life. A subset of the APB cables lacks
+recorded installation dates. For failed cables with missing in-
+stallation dates, the failure age is treated as interval-censored.
+Furthermore, because installation records predate 1990 and
+the maintenance data only begin in 2016, the dataset is sub-
+ject to left-truncation. Overall, the dataset includes primarily
+right-censored observations, along with 56 uncensored and
+37 interval-censored cases. Cables for which the pre-failure
+condition could not be reliably reconstructed were excluded
+from the analysis.
+A. SIMULATION SETUP
+Each cable is assigned a replacement cost (DKK/km) based
+on the population density of its location, with rural areas being
+the least expensive. The average unplanned outage duration is
+approximately 45 minutes. Using the NWPH model and sim-
+ulation framework, we assess the effectiveness of proactive
+maintenance strategies and examine how varying the replace-
+ment budget impacts the potential to delay investments in
+VOLUME 11, 2023 7
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+FIGURE 4: 10 kV cables of a Danish power grid.
+favor of grid reinforcements. Table 2 summarizes the simula-
+tion parameters. A 219% increase in consumption is expected
+between 2024 and 2034, based on projections provided by the
+distribution system operators (DSO). This growth is modeled
+using linear interpolation, starting from approximately 1 kW
+per consumer in 2024. After 2034, consumption is assumed
+constant. Outage costs reflect penalties under updated Danish
+benchmarking regulations.
+TABLE 2: Overview of shared simulation parameters.
+Parameter V alue
+ωNOPF 2
+ωlength [m] 50
+Length of replacement upon failure [m] 10
+Y early budget [mDKK] 19.85
+Outer Monte Carlo iterations 100
+Inner Monte Carlo iterations 100
+Outage cost [DKK/kWh] 75
+Interruption duration [min] 45
+Step size [years] 1
+B. MODEL PARAMETERS
+The NWPH model architecture and training hyperparameters
+are summarized in Table 3, manually tuned using a single
+80/20 data split. Due to the small and imbalanced dataset,
+model evaluation is performed using repeated stratified cross-
+validation, ensuring consistent proportions of uncensored,
+interval-censored, and right-censored observations across all
+folds.
+IV. RESULTS AND DISCUSSION
+The evaluation consists of four parts. First, the predictive
+performance of the NWPH model is assessed using the Fault
+Capture–Length Capture (FCLC) ranking metric [31]. Sec-
+ond, SHapley Additive exPlanations (SHAP) [32] are used to
+TABLE 3: Composition of the NWPH model and its training
+hyperparameters.
+Parameter Type Dimension Activation
+Hazard Initialization
+λmin V alue 0.001 -
+λmax V alue 0.1 -
+γmin V alue 1 -
+γmax V alue 9 -
+Grid size ( gz) V alue 50 -
+Max iterations ( itmax ) V alue 10 -
+Neural Net
+Layer 1 Linear 10 Linear
+Layer 2 Linear 5 Linear
+Layer 3 Linear 5 Linear
+Layer 4 Linear 1 Linear
+Optimizer
+Algorithm AdamW - -
+Learning rate V alue 0.001 -
+β1 V alue 0.90 -
+β2 V alue 0.999 -
+Stopping Criteria
+Epochs per checkpoint V alue 50 -
+Stopping threshold ( ∆loss ) V alue 0.001 -
+No improvement checkpoints V alue 5 -
+Max epochs V alue 5000 -
+interpret the influence of input features. Third, the uncertainty
+of the NWPH model’s predictions is analyzed. Finally, the
+effectiveness of different maintenance strategies is compared,
+followed by a sensitivity analysis of the maintenance budget.
+A. PERFORMANCE OF THE NWPH MODEL
+Loading features were excluded from the dataset, as they did
+not improve the NWPH model’s performance, as shown in
+Figure 5. The figure compares three approaches: the proposed
+NWPH model, a naïve (random) ranking, and the Weibull
+Length Proportional (WBLP) model. The WBLP model is a
+simplified version of the Weibull Proportional Hazards model
+that assumes the hazard rate depends only on cable length.
+Model performance is evaluated using repeated stratified
+cross-validation, which ensures that each data split maintains
+a balanced proportion of censored, uncensored, and interval-
+censored cases. The figure shows the average FCLC curves
+for the three methods. This curve illustrates how well each
+method identifies high-risk cables. For example, a point at
+(0.2, 0.25) means that the top 20% of the network length
+(ranked by predicted risk) contains 25% of all failures.
+It is surprising that the WBLP model performs worse than a
+random ranking. Normally, we expect older and longer cables
+to fail more often, but the results do not support this. There
+are a few possible reasons. First, many cables have unknown
+installation dates, and their actual ages might be higher than
+others. Second, some physical factors might affect failure risk
+in ways that age and length alone cannot explain. Finally, the
+data may not be very accurate. Since most cable ages were
+estimated from old financial records, there is a chance of
+human error.
+The NWPH model shows strong performance by identi-
+8 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+FIGURE 5: Ranking metric Fault Capture–Length Capture
+(FCLC) for the NWPH model, a WBLP model, and a naïve
+ranking, which represents the average random ranking of the
+cables.
+fying the 40% of cables responsible for about 55% of the
+failures in the test set, on average. In comparison, the WBLP
+model identifies the top 40% of at-risk cables, but they ac-
+count for only about 30% of failures. This highlights the
+NWPH model’s better ability to rank cables by their fault
+vulnerability. The NWPH model achieves a higher average
+area under curve (AUC) compared to both the naïve and age-
+based ranking methods. A Wilcoxon rank-sum test was used
+to check if the NWPH model consistently performs better
+than the WBLP model. The test supports this with a p-value of
+0.004. This suggests that age and length alone are not enough
+to explain cable failure risk and other important physical
+factors likely play a role.
+B. EFFECTS OF TRUNCATION AND CENSORING
+Figure 6 compares reliability predictions from three NWPH
+model variants:
+• A full model that accounts for truncation, interval-
+censoring, and right-censoring (red),
+• A model that ignores truncation but includes interval-
+censoring and right-censoring (blue),
+• A model that only accounts for right-censoring (purple).
+Uncensored data is included in all cases. The results show
+that ignoring interval-censoring slightly overestimates relia-
+bility. The most significant effect, however, is from trunca-
+tion. When truncation is not handled, the model assumes no
+failures happen before cable age 30. This creates an unre-
+alistic delay in the reliability decline, because early failures
+are missing from the data. These missing failures are due to
+incomplete maintenance records rather than an actual absence
+of failures.
+When truncation is accounted for, the model begins the
+decline in reliability earlier and more gradually. This pattern
+is more realistic and provides more accurate predictions.
+FIGURE 6: Comparison of reliability predictions for NWPH
+models trained with different levels of data completeness:
+(red) accounting for truncation, interval-censoring, and right-
+censoring; (blue) accounting for interval-censoring and right-
+censoring only; and (purple) accounting for right-censoring
+only. Reliability is computed based on the average relative
+risk across all cables in the dataset.
+C. FEATURE IMPORTANCE
+Figure 7 displays the SHAP values for the NWPH model
+trained on the full dataset. These values show how each input
+feature influences the model’s predictions. Feature impor-
+tance is measured in this way because the NWPH model uses
+a neural network, and the features affect reliability and hazard
+estimates through this network’s internal structure.
+FIGURE 7: SHAP values showing each feature’s impact on
+the NWPH model output. Each dot represents one observa-
+tion. Features are sorted by average absolute impact, with
+horizontal bars indicating their mean contribution.
+Cables with oil joints tend to have lower failure risk. A
+VOLUME 11, 2023 9
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+possible reason is that oil joints help protect the insulation
+over time. Copper conductors show higher failure risk than
+aluminum ones. However, it’s unclear if this is due to how
+copper cables fail or simply because they are older. The
+same uncertainty exists for cable diameter. Cables placed near
+tertiary and secondary roads show higher risk. This may be
+caused by heavier traffic and road salt used during winter. In
+contrast, cables near residential roads have lower risk. The
+soil water content feature has little impact. The soil-water-
+content variable is sourced from coarse, large-area grids and
+may not reflect local soil conditions along each cable corridor,
+which explains its low SHAP impact. We therefore exclude
+this feature in the final model; its removal does not materially
+alter SAIDI/SAIFI or outage-cost outcomes nor the ranking
+behavior under the Bayesian bootstrap. Some cable features,
+like the number of joints, can change over time due to repairs
+or upgrades. This historical information was not available in
+the data. If it were, the model could be improved by including
+these time-varying features.
+D. MODEL UNCERTAINTY
+Figure 8 illustrates the predicted hazard rates and reliability
+functions over time for three example cables. Uncertainty
+is shown using boxplots, which reflect the distribution of
+predictions from 100 Bayesian bootstrap NWPH models gen-
+erated in the outer loop of the nested Monte Carlo simulation.
+The model successfully differentiates between the cables. As
+expected, the spread in hazard rates increases with time, while
+the spread in reliability widens initially but then narrows,
+since reliability begins at 1 and gradually approaches 0 for
+all cables over time.
+Figure 9 shows how the sample-wise interquartile range
+of reliability evolves over time. This variability contributes
+to the spread observed in the maintenance strategies’ KPI
+distributions.
+Figure 9 shows how much the model’s reliability estimates
+for cables vary over time. In simple terms, it tells us how
+confident the model is at different cable ages. The uncertainty
+grows as cables get older, especially up to around 80 years.
+After that, the model becomes a bit more confident again.
+This helps us understand at what ages we can trust the model’s
+predictions the most and where we should be more cautious.
+This uncertainty in reliability predictions leads to variation in
+the results of different maintenance strategies, such as cost
+and number of failures.
+E. RELIABILITY AND RISK DISTRIBUTIONS
+Figure 10 shows the average reliability and risk measured as
+the number of consumers interrupted per year for the PILC
+cables. Most cables have low associated risk, aligning with
+the system’s high supply reliability (SAIDI ≈ 10 minutes).
+However, the total risk from PILC cables rises from about
+13,500 consumers interrupted annually in 2023 to around
+24,800 by 2033 if no actions are taken.
+Table 4 summarizes KPIs for various maintenance strate-
+gies over the period 2023 to 2033. These include the total
+(a) Hazard rate
+(b) Reliability
+FIGURE 8: Uncertainty in hazard rate and reliability pre-
+dictions for 3 cables. The whiskers denote the 5 th and 95 th
+percentile.
+number of failures, total outage costs, and average System
+Average Interruption Frequency Index (SAIFI) and SAIDI
+values. The vulnerability-based proactive strategy, which di-
+rectly targets reducing failures, performs best overall. The
+risk-based strategy ranks second, while the consequence-
+based and naïve strategies, which do not consider actual fail-
+ure rates, perform less effectively. Among the four strategies
+in Table 4, the risk-based approach achieves the lowest SAIFI,
+SAIDI, and outage costs saving up to 6.16 mDKK and reduc-
+ing average interruption duration by up to 4 minutes. These
+figures are computed relative to the Naive baseline in Table 4,
+the risk-based (NWPH) strategy reduces SAIDI by 50%
+versus Naive and yields an outage-cost saving of 6.16 mDKK
+over the study horizon. While the vulnerability-based strategy
+prevents the most failures, both the risk and consequence-
+based strategies are more cost-effective. The naïve strategy
+10 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+FIGURE 9: Interquartile range of reliability predictions
+over time. Higher values indicate greater uncertainty, which
+contributes to variation in maintenance strategy outcomes.
+Whiskers show the 5 th and 95th percentiles.
+performs worst across all indicators.
+TABLE 4: KPIs for maintenance strategies from 2023 to
+2033. The KPIs include only material and aging-related fail-
+ures of APB cables.
+Statistic Vulnerability Naïve Risk Consequence
+Total Failures
+5th percentile 82 134 102 108
+Mean 113 186 138 149
+95 th percentile 144 243 177 194
+Outage Cost [mDKK]
+5th percentile 4.14 7.26 3.03 3.36
+Mean 5.88 10.38 4.22 4.74
+95 th percentile 7.75 13.91 5.51 6.24
+Mean SAIFI
+5th percentile 0.04 0.08 0.03 0.03
+Mean 0.09 0.15 0.07 0.07
+95 th percentile 0.16 0.25 0.11 0.12
+Mean SAIDI [min]
+5th percentile 1.62 3.40 1.34 1.54
+Mean 4.06 6.90 2.98 3.33
+95 th percentile 7.01 11.03 4.92 5.44
+F. REDUCED MAINTENANCE BUDGET
+Figure 11a and Figure 11b show the impact of reducing the
+maintenance budget on cumulative outage costs and SAIDI
+for the risk-based strategy. Three scenarios are compared: full
+budget (status quo), 25% reduction, and 50% reduction. With
+the full budget, outage costs level off at just over 4 mDKK.
+Reducing the budget by 25% and 50% increases total costs
+to around 7 mDKK and 14 mDKK, respectively. SAIDI stays
+near 5 minutes in the status quo and 25% scenarios. In the
+50% reduction case, it peaks at 5.5 minutes in 2032 before
+declining.
+Overall, halving the budget leads to only a 1.5-minute
+increase in SAIDI and 10 mDKK higher costs over time.
+This suggests the budget can be reduced significantly without
+(a) Reliability
+(b) Risk
+FIGURE 10: Reliability and risk maps for the PILC cables in
+2023 according to the average of the 100 Bayesian bootstrap
+NWPH models. The color scheme is inverted for the reliabil-
+ity, such that both for metrics red colors are associated with a
+strong incentive to replace.
+major reliability loss, enabling reallocation of funds to other
+needs, such as grid upgrades. However, keeping the budget
+low for many years can weaken reliability. Lower spending
+keeps older cables in service and shifts more work to repairs
+after faults. These repairs add joints and leave short sections,
+VOLUME 11, 2023 11
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+which our model links to higher failure risk. As assets age,
+results become less predictable and the chance of very poor
+reliability years increases. At the same time, expected growth
+in demand means each failure will affect more customers
+and cost more. Therefore, the 50% cut should be viewed
+as a temporary step. A careful plan would set a minimum
+number of yearly replacements on high-risk lines, set clear
+SAIDI/SAIFI limits with planned catch-up work if those
+limits are exceeded, and prioritize renewal where an outage
+would affect many customers.
+To assess robustness beyond budget, a one-at-a-time tor-
+nado analysis was performed over 2023–2033 using the same
+100 × 100 bootstrap/Monte–Carlo configuration as in the
+main results, varying one parameter at a time around the base-
+line (unit outage price = 75 DKK/kWh, interruption duration
+= 45 min, ωNOPF = 2 , ωlength = 50 m; baseline values set
+by the DSO) while holding the others fixed and reusing the
+same outer models. For the risk-based strategy, the baseline
+median cumulative outage cost is 4.29 mDKK. V arying policy
+thresholds had only sub-percent effects on the median cost:
+ωNOPF = 1 and 3 changed the median by ≈ +0.8%
+(∼+35 kDKK) and ≈ +0.3% (∼+14 kDKK), respectively;
+ωlength: 50 → 80 m yielded ≈ +0.3% (∼ +15 kDKK), and
+50 → 20 m ≈ − 0.1% (∼ −6 kDKK). By contrast, the price
+and duration assumptions scale the outcome nearly linearly:
+increasing the unit outage price 75 →100 DKK/kWh (+33%)
+raises the median cumulative outage cost by ≈ +33%, and
+75 →50 DKK/kWh (−33%) lowers it by ≈ −33%; the same
+near-linear scaling holds for changing the interruption from
+45 → 60 min or 45 → 30 min. The pattern is consistent
+across strategies (e.g., vulnerability: 6.22 → 8.29 mDKK;
+naïve: 11.93 → 15.88 mDKK for 75 → 100 DKK/kWh).
+These results indicate that our conclusions are robust to
+reasonable choices of ω-thresholds, while sensitivity to the
+DSO-set price and duration assumptions is predictable and
+transparent. The analysis focuses on the risk-based strategy
+(baseline median cumulative outage cost = 4.29 mDKK) and
+is summarized in Figure 12.
+G. COMPUTATIONAL CONSIDERATIONS AND SCALING
+Our nested design runs B = 100 bootstrap fits and K = 100
+inner Monte-Carlo simulations per strategy. For a network
+with N cables over a T -year horizon, one full evaluation
+scales roughly with B × K × S ×(N log N + NT ): the N log N
+term comes from ranking assets by risk, and NT from yearly
+simulation of failures and replacements. The outer bootstrap
+models and inner simulations are independent, so evaluations
+parallelize naturally across CPUs/GPUs. For larger grids,
+the same methodology can be adopted with practical speed-
+ups: (i) adaptive inner simulation (increase K only until
+SAIDI/SAIFI/cost standard errors fall below a target) and
+(ii) lightweight surrogates to interpolate KPI-versus-budget
+curves from a few budget points. These options preserve
+conclusions while reducing runtime and compute cost.
+The proposed NWPH planner fits into existing mainte-
+(a) Cumulative sum of outage costs.
+(b) SAIDI.
+FIGURE 11: Comparison of the risk-based strategy outcomes
+under different maintenance budgets.
+nance workflows with minimal changes. Inputs are stan-
+dard artifacts already held by DSOs, an asset register (cable
+ID, type, length, joints, install year) and event logs (fail-
+ures/repairs with censoring/truncation times); outputs are a
+ranked list of candidate replacements with recommended
+year, expected SAIDI/SAIFI impact, and projected outage
+cost, which can be exported and ingested by enterprise main-
+tenance systems. Model explanations (e.g., feature effects for
+high-risk cables) support engineering review and field valida-
+tion before issuing work orders. From a scalability standpoint,
+training is performed per bootstrap sample on a data snapshot,
+while inference and the nested Monte Carlo simulation scale
+approximately linearly with the number of assets and are
+easily parallelized across bootstrap samples and simulation
+runs. The framework therefore extends to larger networks as
+12 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+FIGURE 12: Tornado sensitivity of median cumulative out-
+age cost ( ∆ vs. baseline) for the risk-based strategy, 2023-
+2033. One parameter is varied at a time around the DSO-set
+baseline, with all others fixed and identical bootstrap/Monte-
+Carlo draws reused. Price and duration exhibit near-linear
+±33% scaling; ωNOPF and ωlength have sub-percent effects.
+The vertical line denotes the baseline.
+long as basic registry and event data are available; sensor-rich
+data are beneficial but not required.
+V. CONCLUSION
+This study introduced the NWPH model combined with a
+Bayesian nested Monte Carlo simulation framework to eval-
+uate maintenance strategies for the replacement of PILC
+(APB) cables in electrical distribution networks. The NWPH
+model effectively addresses common data limitations such
+as censoring and truncation, which are often neglected in
+engineering reliability modeling. Our findings demonstrated
+the significant impact these data issues have on reliability
+predictions and underscored the value of properly accounting
+for them.
+The NWPH model produced informative and robust relia-
+bility estimates, with low predictive uncertainty reflected by
+a maximum interquartile range of 0.12. Compared to conven-
+tional ranking approaches based solely on cable age or length,
+the NWPH-based strategy provided superior performance in
+identifying vulnerable assets.
+Simulation results confirmed that the risk-based mainte-
+nance strategy was the most cost-effective. It reduced outage
+costs by up to 6.16 million DKK and SAIDI by as much as
+4 minutes, compared to alternative strategies. Additionally,
+sensitivity analysis revealed that the annual maintenance bud-
+get could be halved with only a modest increase in SAIDI
+(1.5 minutes) and cumulative outage costs (10 million DKK).
+These results suggest that network operators can allocate
+resources more efficiently, prioritizing critical upgrades like
+grid reinforcements without compromising service reliability.
+Overall, the proposed framework offers a practical and
+scalable decision-support tool for asset management, en-
+abling data-informed, cost-conscious, and risk-aware main-
+tenance planning.
+ACKNOWLEDGMENT
+This work is supported by the “Leveraging Smart Meter Data
+to Optimize Grid Investments” and “Participation in IEA
+ISGAN Working Group 6 ‘Power T&D Systems’,” which
+are funded by the Danish Energy Agency under the Energy
+Technology Development and Demonstration Program, ID
+number 64022-1049 and 134243-533635, respectively.
+REFERENCES
+[1] ‘‘10-20 kv-kablers fejlfrekvens som funktion af installationsår og alder,’’
+Danish Energy, Technical report, 2017.
+[2] J. Tornbjerg, "Lige nu: 35 netudviklingsplaner i høring" , Green
+Power Denmark, 2024, https://greenpowerdenmark.dk/nyheder/
+lige-nu-35-netudviklingsplaner-hoering.
+[3] M. R. Shadi, H. Mirshekali, and H. R. Shaker, ‘‘Partial discharge-based
+cable vulnerability ranking with fuzzy and fahp models: Application in a
+danish distribution network,’’ Sensors, vol. 25, no. 11, p. 3454, 2025.
+[4] W. B. Y ousuf, T. M. R. Khan, S. T. Tariq, M. ul Hassan, and A. Shah,
+‘‘Remaining useful life prediction of aerial bundled cables in coastal areas
+using thermal and corrosion degradation models,’’ IEEE transactions on
+power delivery, vol. 37, no. 4, pp. 2543–2550, 2022.
+[5] M. Alqudah and Z. Obradovic, ‘‘Enhancing weather-related outage pre-
+diction and precursor discovery through attention-based multi-level mod-
+eling,’’ IEEE Access, vol. 11, pp. 94 840–94 851, 2023.
+[6] M. R. Shadi, H. Mirshekali, and H. R. Shaker, ‘‘Temporal fusion trans-
+former for alarm forecasting in a Danish DSO: embedding Pearson corre-
+lation,’’Proc. 2025 IEEE 19th International Conference on Compatibility,
+Power Electronics and Power Engineering (CPE-POWERENG) , pp. 1–6,
+2025.
+[7] P . Afzali, F. Keynia, and M. Rashidinejad, ‘‘A new model for reliability-
+centered maintenance prioritisation of distribution feeders,’’ Energy (Ox-
+ford), vol. 171, pp. 701–709, 2019.
+[8] S. Moradi-Sarvestani, M. R. Dehbozorgi, and M. Rastegar, ‘‘A three-
+stage reliability-centered framework for critical feeder identification, fail-
+ure modes prioritization, and optimal maintenance strategy assignment in
+power distribution system,’’ Electric power systems research , vol. 230,
+2024.
+[9] M. Enjavimadar and M. Rastegar, ‘‘Optimal reliability-centered mainte-
+nance strategy based on the failure modes and effect analysis in power dis-
+tribution systems,’’ Electric power systems research , vol. 203, p. 107647,
+2022.
+[10] H. Mirshekali, L. K. Mortensen, and H. R. Shaker, ‘‘Reliability-aware
+multi-objective approach for predictive asset management: A danish dis-
+tribution grid case study,’’ Applied energy, vol. 358, p. 122556, 2024.
+[11] N. D. Milosevic, Z. N. Popovic, and N. Kovacki, ‘‘A multi-period multi-
+criteria replacement and rejuvenation planning of underground cables in
+urban distribution networks,’’ International journal of electrical power &
+energy systems, vol. 149, p. 109018, 2023.
+[12] H. Laabassi and M. Maaroufi, ‘‘System dynamics modelling method
+optimizing capex/opex performance in electrical distribution networks,’’
+Journal of Electrical Systems , vol. 16, no. 4, pp. 550–568, 2020.
+[13] A. A. Hamad and R. A. Ghunem, ‘‘A techno-economic framework for
+replacing aged xlpe cables in the distribution network,’’ IEEE transactions
+on power delivery, vol. 35, no. 5, pp. 2387–2393, 2020.
+[14] T. Somsak, T. Suwanasri, and C. Suwanasri, ‘‘Remaining useful life esti-
+mation for underground cable systems based on historical health index,’’
+Energies (Basel), vol. 15, no. 24, p. 9447, 2022.
+[15] Y . Liao, B. Hui, and Y . Wei, ‘‘Risk assessment of high-voltage cable
+system based on cable failure probability and failure loss,’’ in 2020 IEEE
+3rd International Conference on Automation, Electronics and Electrical
+Engineering (AUTEEE). IEEE, 2020, pp. 143–146.
+[16] L. K. Mortensen and H. R. Shaker, ‘‘Fuzzy risk assessment of underground
+power distribution network cables based on geo-analytical fault vulnerabil-
+ity,’’ in2022 IEEE 6th International Conference on Condition Assessment
+Techniques in Electrical Systems (CATCON). IEEE, 2022, pp. 72–78.
+[17] M. H. P . Klerx, J. Morren, and H. Slootweg, ‘‘Analyzing parameters that
+affect the reliability of low-voltage cable grids and their applicability in
+asset management,’’ IEEE transactions on power delivery , vol. 34, no. 4,
+pp. 1432–1441, 2019.
+VOLUME 11, 2023 13
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+M.R. Shadi et al.: Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling
+[18] M. Buhari, V . Levi, and S. K. E. Awadallah, ‘‘Modelling of ageing distribu-
+tion cable for replacement planning,’’IEEE transactions on power systems,
+vol. 1, no. 5, 2015.
+[19] M. Buhari, V . Levi, and A. Kapetanaki, ‘‘Cable replacement considering
+optimal wind integration and network reconfiguration,’’IEEE transactions
+on smart grid , vol. 9, no. 6, pp. 5752–5763, 2018.
+[20] Q.-A. Wang, Q. Liu, Z.-G. Ma, J.-F. Wang, Y .-Q. Ni, W.-X. Ren, and H.-
+B. Wang, ‘‘Data interpretation and forecasting of SHM heteroscedastic
+measurements under typhoon conditions enabled by an enhanced hierarchi-
+cal sparse Bayesian learning model with high robustness,’’ Measurement,
+vol. 230, p. 114509, 2024.
+[21] Q.-A. Wang, J. Chen, Y .-Q. Ni, Y .-F. Xiao, N.-B. Liu, S.-K. Liu, and W.-
+S. Feng, ‘‘Application of Bayesian networks in reliability assessment: A
+systematic literature review,’’Structures, vol. 71, p. 108098, 2025.
+[22] B. Y ang, X. Liang, S. Xu, M. S. Wong, and W. Ma, ‘‘A time-series based
+deep survival analysis model for failure prediction in urban infrastructure
+systems,’’ Engineering Applications of Artificial Intelligence , vol. 136,
+p. 108876, 2024.
+[23] W. Zhang, C. Shao, W. Huang, B. Hu, J. Y an, K. Xie, M. Cao, and Z. Wei,
+‘‘Failure Rate Prediction of a Power Transformer: A Decomposition-Based
+Bayesian Deep Learning Method,’’ CSEE Journal of Power and Energy
+Systems, vol. 11, no. 4, pp. 1596–1609, 2025.
+[24] Y .-S. Sim, C.-K. Lee, J.-S. Hwang, G.-Y . Kwon, and S. J. Chang, ‘‘AI-
+based remaining useful life prediction for transmission systems: Integrating
+operating conditions with TimeGAN and CNN-LSTM networks,’’Electric
+Power Systems Research, vol. 238, p. 111151, 2025.
+[25] F. Faghiri and A. Kohansal, ‘‘Cox proportional hazards model with
+Bayesian neural network for survival prediction,’’ Scientific Reports ,
+vol. 15, no. 1, p. 31581, 2025.
+[26] Y . Liao, B. Hui, and Y . Wei, ‘‘Risk assessment of high-voltage cable system
+based on cable failure probability and failure loss.’’ IEEE, 2020, pp. 143–
+146.
+[27] J. Z. Hansen, ‘‘Failure statistics for medium voltage cable systems in
+denmark,’’ in 27th International Conference on Electricity Distribution
+(CIRED), 2023, p. 10834.
+[28] J. P . Klein, M. L. Moeschberger, and S. O. service), Survival Analysis:
+Techniques for Censored and Truncated Data , second;2;second;2nd; ed.,
+M. L. Moeschberger, Ed. New Y ork, NY: Springer New Y ork,
+2003;2006;2005;2011;.
+[29] K. C. Cain, S. D. Harlow, R. J. Little, B. Nan, M. Y osef, J. R. Taffe, and
+M. R. Elliott, ‘‘Bias due to left truncation and left censoring in longitudinal
+studies of developmental and disease processes,’’ American journal of
+epidemiology, vol. 173, no. 9, pp. 1078–1084, 2011.
+[30] H. Kvamme, O. Borgan, and I. Scheel, ‘‘Time-to-event prediction with neu-
+ral networks and cox regression,’’ Journal of machine learning research ,
+vol. 20, 2019.
+[31] L. K. Mortensen, H. R. Shaker, and C. T. V eje, ‘‘Relative fault vulnerability
+prediction for energy distribution networks,’’ Applied energy, vol. 322, p.
+119449, 2022.
+[32] M. R. Shadi, H. Mirshekali, and H. R. Shaker, ‘‘Explainable artificial
+intelligence for energy systems maintenance: A review on concepts, current
+techniques, challenges, and prospects,’’Renewable and Sustainable Energy
+Reviews, vol. 216, p. 115668, 2025.
+MOHAMMAD REZA SHADI received his B.Sc.
+degree in Electrical Engineering from Persian Gulf
+University, Iran, in 2018, and his M.Sc. degree in
+Power Systems from Shahid Beheshti University,
+Iran, in 2021. He is currently pursuing his Ph.D. at
+the University of Southern Denmark (SDU), Den-
+mark, focusing on advanced asset management and
+maintenance methodologies for energy infrastruc-
+ture.
+His research interests include smart grids, fault
+location, frequency disturbance analysis, deep learning applications in power
+systems, as well as predictive and prescriptive maintenance strategies for
+improved grid reliability and efficiency.
+LASSE KAPPEL MORTENSEN received his
+B.Sc. and M.Sc. degrees in Energy Technology
+Engineering from the SDU, Denmark, in 2019
+and 2021, respectively. He recently completed his
+Ph.D. at the SDU Center for Energy Informat-
+ics, focusing on predictive and reliability-centered
+maintenance for smarter asset management in en-
+ergy distribution systems.
+His research interests include predictive and pre-
+scriptive maintenance, fault prediction, reliability
+analysis, data science applications in energy systems, GIS data processing,
+and energy modeling.
+HAMID MIRSHEKALI was born in Iran, in 1995.
+He received the B.Sc. and M.Sc. degrees in control
+systems from Persian Gulf University, Bushehr,
+Iran, in 2017 and 2020, respectively. He is cur-
+rently working toward the Ph.D. degree in as-
+set maintenance and management with the SDU,
+Odense, Denmark.
+His research interests include predictive main-
+tenance, asset management, machine learning, and
+power system.
+HAMID REZA SHAKER (Senior Member, IEEE)
+received the Ph.D. degree in control engineering
+from Aalborg University, Aalborg, Denmark, in
+2010.
+He is currently a Professor with the Center for
+Energy Informatics, SDU, Odense, Denmark. He
+is the Leader of the fault detection and diagnosis
+and processes monitoring research activities in the
+center. From 2009 to 2013, he was a Visiting Re-
+searcher with the Massachusetts Institute of Tech-
+nology, Cambridge, MA, USA, a Postdoctoral Researcher, and an Assistant
+Professor with Aalborg University; and from 2013 to 2014, an Associate
+Professor with the Norwegian University of Science and Technology, Trond-
+heim, Norway.
+Dr. Shaker serves three journals as a Member of the editorial board and
+has been an IPC Member for several conferences.
+14 VOLUME 11, 2023
+This article has been accepted for publication in IEEE Access. This is the author's version which has not been fully edited and 
+content may change prior to final publication. Citation information: DOI 10.1109/ACCESS.2025.3613832
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
