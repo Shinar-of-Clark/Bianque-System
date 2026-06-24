@@ -2,12 +2,16 @@
 
 > 🔙 **Navigation:** [Back to Bianque System Roadmap](../readme.md) | ⏪ [Previous: PART 1 (Underground Cables)](../PART_1/PART_I_README.md)
 
-## 📄 Manuscript PDF ([PDF Download](./paper_2_draft_V1_EN.pdf))
-*   **Status**: Work in Progress
+## 📄 Manuscript PDF ([PDF Download](./From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Part_II_Switchgear_Management.pdf))
+*   **DOI**: [10.5281/zenodo.20751877](https://doi.org/10.5281/zenodo.20751877)
+*   **ResearchGate**: [From Causal Auditing to Value Maximization for Core Distribution Assets -Part II Switchgear Management](https://www.researchgate.net/publication/407269971_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_-Part_II_Switchgear_Management?_tp=eyJjb250ZXh0Ijp7InBhZ2UiOiJwcm9maWxlIiwicHJldmlvdXNQYWdlIjpudWxsLCJwb3NpdGlvbiI6InBhZ2VDb250ZW50In19)
+*   **Status**: Officially Published (2026-06-19)
 *   **Target Equipment**: Switchgear Family (AIS & GIS)
     *   *(Note: This research breaks the narrow barriers of traditional voltage levels, directly penetrating to the physical essence, and categorizing based on "insulation and arc-extinguishing medium". AIS represents an air-insulated system dominated by mechanical spring fatigue, while GIS represents a sealed chemical-insulated system dominated by SF6 gas leakage. This framework aims to build a universal auditing paradigm applicable to core switchgear assets across all voltage levels in the power grid.)*
 
 ### 📢 Evolution of Research Scope
+*   **[2026-06-19] PART II Officially Published**
+    *   The manuscript *From Causal Auditing to Value Maximization for Core Distribution Assets -Part II Switchgear Management* has been officially published, with DOI: `10.5281/zenodo.20751877`.
 *   **[2026-06-15] High-Voltage Clearance Boundary & "Tale of Two Cities" Dual-Track Architecture**
     *   **Scope Refinement**: This framework explicitly restricts the auditing target to core primary assets (AIS and GIS) that require **High-Voltage Clearance / Isolation** to execute maintenance, completely focusing on operational interventions with extremely high downtime costs.
     *   **"Tale of Two Cities" Dual-Track Architecture**: Breaking the limitation of a single piece of equipment, this research conducts auditing on two core switchgear assets synchronously and in parallel. Although the degradation of equipment in the real world is multi-dimensional (e.g., insulation aging, contact burnout), this system adheres to the "Weakest Link Effect" principle. It extracts the **most fatal physical fingerprints** that determine retirement and replacement for AIS and GIS respectively, serving as the input standards for the survival algorithms:

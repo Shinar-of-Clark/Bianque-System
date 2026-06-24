@@ -1,7 +1,15 @@
 # 📝 PART 1: Underground Cables —— Time-Varying Risk and Chronic Degradation Auditing
 
-## 📄 Manuscript PDF ([PDF Download](./part_I_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets—Underground_Cable_Management.pdf))
-*   **Release Date**: 2026-06-13
+> 🔙 **Navigation:** [Back to Bianque System Roadmap](../readme.md) | ⏩ [Next: PART 2 (Switchgears/Circuit Breakers)](../PART_2/PART_II_README.MD)
+
+## 📄 Manuscript PDF ([PDF Download](./Part_I_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets—Underground_Cable_Management.pdf))
+*   **DOI**: [10.5281/zenodo.20676445](https://doi.org/10.5281/zenodo.20676445)
+*   **ResearchGate**: [From Causal Auditing to Value Maximization for Core Distribution Assets -Part I Underground Cable Management](https://www.researchgate.net/publication/407033609_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets-Part_I_Underground_Cable_Management)
+*   **Status**: Officially Published (2026-06-13)
+
+### 📢 Evolution of Research Scope
+*   **[2026-06-13] PART I Officially Published**
+    *   The manuscript *From Causal Auditing to Value Maximization for Core Distribution Assets -Part I Underground Cable Management* has been officially published, with DOI: `10.5281/zenodo.20676445`.
 
 ## 📌 Methodology Heritage
 This research is not merely an independent exploration of underground cables, but a deep integration and cross-domain migration of two top-level framework concepts. This ensures high academic consistency across the series and maintains the coherent foundation of the "Bianque System":

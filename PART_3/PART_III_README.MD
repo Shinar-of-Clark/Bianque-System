@@ -1,100 +1,104 @@
 <!-- 
-💡 【系统核心哲学与论文指导思想 / Core Philosophy Memo】
-1. 零硬件追加：重点不是采集状态数据，坚决不单独加装新传感器。
-2. 算法炼金：利用现有的、常规的采集传感器历史数据进行健康评估。
-3. 降维打击死阈值：一般传感器只看“死阈值”（坏没坏），本系统利用现有数据评估的是“什么时候坏”（RUL倒计时）。
-4. 终极目的：用数据推断 RUL，预测资产寿命，从而最优化资产的使用时间，最大幅度、极限地压榨/使用资产。
-5. 终极生态闭环：扁鹊负责“渐进式退化”的经济博弈；所有扁鹊未能在 F 点前预测到的“突发性暴毙（如雷击/隐蔽缺陷）”，其死前数据全部作为最宝贵的资源馈入同源的《拉普拉斯系统》。拉普拉斯负责在微秒级高频瞬态中提取“一点点微弱的致命特征”，一旦确证，将其化为新的时变协变量反哺给扁鹊。从而实现系统的无限自进化。
-（注：此段注释为主作者与AI的底层思维共识，不直接显示在渲染文档中，但指导所有算法与行文逻辑。）
+💡 【Core Philosophy Memo】
+1. Zero Hardware Addition: The focus is not on collecting state data; we strictly avoid adding new, independent sensors.
+2. Algorithmic Alchemy: Utilizing existing, conventional historical sensor data for health assessment.
+3. Dimensionality Reduction on Hard Thresholds: Conventional sensors only monitor "hard thresholds" (whether it is broken). This system uses existing data to evaluate "when it will break" (RUL countdown).
+4. Ultimate Goal: Inferring RUL through data, predicting asset lifespan, thereby optimizing the asset's usage time, and maximizing/sweating the asset to its absolute limit.
+5. Ultimate Ecosystem Closed-Loop: Bianque handles the economic game of "progressive degradation." All "sudden sudden-deaths (such as lightning strikes/hidden defects)" that Bianque fails to predict before Point F will have their pre-death data fed back as the most valuable resource into the homologous "Laplace System." Laplace is responsible for extracting "faint, fatal signatures" in microsecond-level, high-frequency transients. Once confirmed, these are transformed into new time-varying covariates and fed back to Bianque, achieving infinite self-evolution of the system.
+(Note: This comment represents the underlying consensus between the primary author and the AI, not directly displayed in the rendered document, but it guides all algorithms and logical flow.)
 -->
 
-# 📝 PART 3: 电力变压器 (Power Transformers) —— 多状态竞争风险与极限资产榨取的双轨审计
+# 📝 PART 3: Power Transformers —— Dual-Track Auditing of Multi-State Competing Risks and Extreme Asset Sweating
 
-> 🔙 **导航 (Navigation):** [返回扁鹊系统路线图 (Back to Bianque System Roadmap)](../readme_CH.md) | ⏮️ [PART 1 (地下电缆)](../PART_1/PART_I_README.md) | ⏪ [PART 2 (开关柜/断路器)](../PART_2/PART_II_README.MD)
+> 🔙 **Navigation:** [Back to Bianque System Roadmap](../readme.md) | ⏮️ [PART 1 (Underground Cables)](../PART_1/PART_I_README.md) | ⏪ [PART 2 (Switchgears/Circuit Breakers)](../PART_2/PART_II_README.MD)
 
-## 📄 论文手稿 PDF ([PDF Download](./paper_3_draft_V1_CH.pdf))
-*   **状态 (Status)**: 规划中 / 撰写中 (Planning / Work in Progress)
-*   **目标设备 (Target Equipment)**: 电网核心主变压器 (油浸式) 与 分布式关键节点变压器 (干式)
-    *   *(注：作为配电网中最昂贵、最复杂的核心资产，变压器代表了扁鹊系统的终极挑战。本研究在“高压停电隔离边界”内，构建了应对最复杂多状态物理退化、且最纯粹追求商业投资回报率 (ROI) 的生存审计范式。)*
+## 📄 Manuscript PDF ([PDF Download](./From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Part_III_Transformer_Management.pdf))
+*   **DOI**: [10.5281/zenodo.20811106](https://doi.org/10.5281/zenodo.20811106)
+*   **ResearchGate**: [From Causal Auditing to Value Maximization for Core Distribution Assets -Part III Transformer Management](https://www.researchgate.net/publication/407521258_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_-Part_III_Transformer_Management)
+*   **Status**: Officially Published (2026-06-23)
+*   **Target Equipment**: Core Main Transformers of the Power Grid (Oil-Immersed) and Distributed Critical Node Transformers (Dry-Type)
+    *   *(Note: As the most expensive and complex core assets in the distribution network, transformers represent the ultimate challenge for the Bianque System. Within the "high-voltage outage isolation boundary," this research constructs a survival auditing paradigm that addresses the most complex multi-state physical degradations while purely pursuing the Return on Investment (ROI).)*
 
-### 📢 研究范围演进 (Evolution of Research Scope)
-*   **[2026-06-19] 变压器家族的“双城记” (The Tale of Two Cities for Transformers)**
-    *   **边界扩展**：延续 PART 2 中（AIS机械疲劳 vs. GIS化学泄漏）的双轨对比架构，PART 3 将变压器家族明确划分为两条截然不同，但统一于同一套数学框架的生存分析赛道：
-    *   **👉 城市 A：油浸式变压器 (“可再生”双血条博弈)**
-        *   **仿生学端粒衰减假说 (Biomimetic Telomere Degradation Hypothesis)**：这一框架直接从生物医学的“DNA 端粒 (Telomere)”特性中汲取顶级灵感。我们将绝缘油视为“可复制、可再生、可净化的体液与 DNA”，而将变压器核心的绝缘纸视为“不可修复的细胞端粒”。每一次热负荷循环（细胞分裂），端粒（绝缘纸聚合度 DP）就会不可逆地缩短。当端粒耗尽，无论体液如何纯净，变压器都将迎来绝对的“细胞凋亡（绝缘死亡）”。
-        *   **首创双血条生存系统与海弗里克极限 (Dual Health-Bar & The Hayflick Limit)**：
-            *   **🩸 血条 1（可再生血条 - 绝缘油/DNA）**：基于在线油色谱 (DGA) 的产气率，不仅预测下一次“最佳换油时间”，更首创了对**“剩余可复制次数”**的动态预测。没有任何两台变压器的 DNA 是一样的，系统绝不预设“一台变压器一生只能换油 3 次”这种僵化阈值，而是根据个体历史，精准预测它还能经历几次有价值的“DNA 刷新”。
-            *   **🩸 血条 2（不可再生血条 - 绝缘纸/端粒）**：追踪“端粒”的绝对衰减。随着端粒不可逆地变短，血条 1 的“刷新有效期”会不可避免地缩水：年轻时换一次油能管 5 年；到生命末期，由于内部老化太严重，换一次油可能只能勉强撑 1 个月，甚至 1 周。
-        *   **定义真正的经济学 RUL (True Economic RUL)**：当系统预测出“下一次换油的有效期将极其短暂”，导致**“高频换油的维修资金投入，远远大于这多出来的几天使用时间所带来的电费收益”**时，这两条经济曲线（维护边际成本 vs 运行边际收益）的致命交叉点，就是这台变压器最纯粹、最真实的 **RUL 终结时刻**。DNA 端粒理念，在这里彻底打通了变压器极限压榨的经济学闭环！
-    *   **👉 城市 B：干式变压器 (固体绝缘的隐形杀手与绝杀阵)**
-        *   **三维物理恶化链条 (The Triad of Degradation)**：干式变压器缺乏绝缘油来提供早期的化学预警，其衰亡是纯粹的物理与电磁过程。我们不看死阈值，只捕获其“异常升高的物理背离”：**THD（总谐波畸变率激增，无形诱因） $\rightarrow$ $\Delta T$（相同负荷下的动态温升异常，慢性热疲劳） $\rightarrow$ PD（环氧树脂微裂纹诱发的局部放电，急性电树枝化）**。
-        *   **三部曲集大成的终极打法 (The Master Playbook Synthesis)**：
-            *   **左手传承 PART I（慢性审计）**：在绝缘健康期，利用 THD 和 $\Delta T$ 的长期非平稳漂移作为时变协变量，审计其漫长岁月里的热损伤累积。
-            *   **右手传承 PART II（急症漏斗）**：一旦长期的热疲劳导致树脂内部开裂，局放 (PD) 出现指数级抬头（瞬间触发 P 点 / Potential Failure），系统立刻切入 PART II 标志性的 **10-Decile 贝叶斯生死漏斗**。随着每日高频数据的灌入，先验概率不断被刷新，预测误差被强行压缩，最终在绝缘彻底击穿（F 点）前，给出极度锐利的倒计时。
-        *   **干预策略**：由于干式变压器的固体绝缘不可逆且不可修复，当贝叶斯漏斗逼近绝对安全底线（**第 9 档熔断 / Grade 9**）时，系统将切入极限的“单选项博弈”——在突发爆炸的最后一刻与过早退役的资金浪费之间，精准下达“计划内断电更换”的最高指令。
+### 📢 Evolution of Research Scope
+*   **[2026-06-23] PART III Officially Published**
+    *   The manuscript *From Causal Auditing to Value Maximization for Core Distribution Assets -Part III Transformer Management* has been officially published, with DOI: `10.5281/zenodo.20811106`.
+*   **[2026-06-19] The Tale of Two Cities for Transformers**
+    *   **Boundary Expansion**: Following the dual-track comparative architecture in PART 2 (AIS mechanical fatigue vs. GIS chemical leakage), PART 3 explicitly divides the transformer family into two distinct survival analysis tracks, unified under the same mathematical framework:
+    *   **👉 City A: Oil-Immersed Transformers (The "Renewable" Dual Health-Bar Game)**
+        *   **Biomimetic Telomere Degradation Hypothesis**: This framework draws top-tier inspiration directly from the biomedical characteristics of "DNA Telomeres." We treat the insulating oil as "replicable, renewable, and purifiable bodily fluids and DNA," while treating the insulating paper at the transformer's core as "irreparable cellular telomeres." With every thermal load cycle (cell division), the telomere (Degree of Polymerization, DP, of the insulating paper) irreversibly shortens. When the telomeres are depleted, no matter how pure the bodily fluid is, the transformer will face absolute "apoptosis (insulation death)."
+        *   **Pioneering Dual Health-Bar Survival System & The Hayflick Limit**:
+            *   **🩸 Health-Bar 1 (Renewable Bar - Insulating Oil/DNA)**: Based on the gas production rate from online Dissolved Gas Analysis (DGA), it not only predicts the next "optimal oil change time" but also pioneers the dynamic prediction of the **"remaining replicable times."** No two transformers share the same DNA; the system firmly rejects rigid thresholds like "a transformer can only change oil 3 times in its lifetime." Instead, based on individual history, it precisely predicts how many more valuable "DNA refreshes" it can undergo.
+            *   **🩸 Health-Bar 2 (Non-Renewable Bar - Insulating Paper/Telomere)**: Tracks the absolute degradation of "telomeres." As the telomere irreversibly shortens, the "refresh validity period" of Health-Bar 1 inevitably shrinks: changing the oil when young might last for 5 years; towards the end of its life, due to severe internal aging, an oil change might barely last 1 month, or even 1 week.
+        *   **Defining the True Economic RUL**: When the system predicts that "the validity period of the next oil change will be extremely brief," leading to the scenario where **"the maintenance investment for high-frequency oil changes far exceeds the electricity revenue generated by those few extra days of usage,"** the fatal intersection of these two economic curves (marginal maintenance cost vs. marginal operational revenue) is the purest and truest **RUL termination moment** for this transformer. The DNA telomere concept completely closes the economic loop of extreme transformer sweating here!
+    *   **👉 City B: Dry-Type Transformers (The Invisible Killer and Sudden Death Formation of Solid Insulation)**
+        *   **The Triad of Degradation**: Dry-type transformers lack insulating oil to provide early chemical warnings; their decay is a purely physical and electromagnetic process. We do not look at hard thresholds; we only capture their "abnormally elevated physical divergence": **THD (Total Harmonic Distortion surge, the invisible trigger) $\rightarrow$ $\Delta T$ (Dynamic temperature rise anomaly under the same load, chronic thermal fatigue) $\rightarrow$ PD (Partial Discharge induced by epoxy micro-cracks, acute electrical treeing)**.
+        *   **The Master Playbook Synthesis**:
+            *   **Left Hand inherits PART I (Chronic Auditing)**: During the insulation health period, the long-term non-stationary drift of THD and $\Delta T$ is used as time-varying covariates to audit the accumulation of thermal damage over its long lifetime.
+            *   **Right Hand inherits PART II (Acute Funnel)**: Once long-term thermal fatigue leads to internal cracking of the resin, and Partial Discharge (PD) exhibits exponential growth (instantly triggering Point P / Potential Failure), the system immediately switches into PART II's signature **10-Decile Bayesian Life-and-Death Funnel**. As high-frequency daily data pours in, prior probabilities are continuously refreshed, prediction errors are forcibly compressed, and finally, before a complete insulation breakdown (Point F), an extremely sharp countdown is provided.
+        *   **Intervention Strategy**: Because the solid insulation of dry-type transformers is irreversible and unrepairable, when the Bayesian funnel approaches the absolute safety baseline (**Grade 9 Fuse**), the system will switch into an extreme "single-option game"—delivering the supreme command of "planned power-off replacement" right between the last moment of sudden explosion and the financial waste of premature retirement.
 
-## 📌 理论基础与传承 (Methodology Heritage)
-本研究是《扁鹊系统》三部曲的集大成者。它完美融合了 PART 1 的慢性时变风险与 PART 2 的高频贝叶斯收敛，并完成了与《拉普拉斯系统》的终极生态闭环：
+## 📌 Methodology Heritage
+This research is the synthesis of the "Bianque System" trilogy. It perfectly merges the chronic time-varying risk of PART 1 with the high-frequency Bayesian convergence of PART 2, and completes the ultimate ecosystem closed-loop with the "Laplace System":
 
-> 🌊 **1. 算法体系的终极融合 (The Ultimate Playbook Synthesis)**
-> *   **[六面镜赛马与物理逆向]**: 在不增加任何新硬件的前提下，系统提取常规数据的“异常升高斜率”（如 $\Delta T$ 的物理背离）作为时变协变量，喂入 6 大生存模型进行大逃杀。通过胜出模型（如 Log-logistic）逆向证明热疲劳老化的非线性数学机理。
-> *   **[P 点唤醒与 10-Decile 贝叶斯收敛]**: 针对干式变压器突发的局放 (PD) 或油浸式急剧恶化的气体，系统摒弃“死阈值报警”。一旦触发 P 点，立即将剩余寿命切分为 10 档 (10-Decile)。随着每天常规数据的更新，运用贝叶斯定理不断压缩误差漏斗，最终在到达 F 点前给出绝杀级的倒计时。
+> 🌊 **1. The Ultimate Playbook Synthesis**
+> *   **[Six-Mirror Horse Race & Physical Reverse Engineering]**: Without adding any new hardware, the system extracts the "abnormal elevation slope" of conventional data (such as the physical divergence of $\Delta T$) as time-varying covariates, feeding them into 6 major survival models for a battle royale. The winning model (e.g., Log-logistic) reverse-proves the nonlinear mathematical mechanism of thermal fatigue aging.
+> *   **[Point P Awakening & 10-Decile Bayesian Convergence]**: For sudden PD in dry-type transformers or rapidly deteriorating gases in oil-immersed ones, the system discards "hard threshold alarms." Once Point P is triggered, the remaining life is immediately divided into 10 deciles. As routine data updates daily, Bayes' theorem is applied to continuously compress the error funnel, ultimately delivering a definitive countdown before reaching Point F.
 
-> ⚡ **2. 生态圈协同：拉普拉斯数据反哺闭环 (Laplace Ecosystem Feedback Loop)**
-> *   再完美的生存预测也无法拦截极小概率的“黑天鹅事件”（如异物短路、隐蔽制造缺陷瞬间断裂）。如果变压器发生《扁鹊系统》未能提前在 F 点前预测到的突发暴毙，这部分历史数据不仅不会被抛弃，反而将被全量馈入同源的 **《拉普拉斯平台 (Laplace Platform)》**。
-> *   拉普拉斯利用其不对称确定性架构，在死前的微秒级高频瞬态中寻找“蛛丝马迹”。一旦抓取到“无明显宏观异常，但存在微弱特征”的突发前兆，便将其提取为新的特征库，反哺回《扁鹊系统》的协变量面板。虽然不能保证一定能提前拦截，但至少为扁鹊系统的无限进化奠定了最坚实的数据采集与认知基础。
+> ⚡ **2. Ecosystem Synergy: Laplace Ecosystem Feedback Loop**
+> *   Even the most perfect survival prediction cannot intercept extremely low-probability "black swan events" (e.g., foreign object short circuits, instant fracture of hidden manufacturing defects). If a transformer experiences a sudden death that the "Bianque System" failed to predict ahead of Point F, this portion of historical data will not be discarded; instead, it will be fed entirely into the homologous **"Laplace Platform."**
+> *   Laplace uses its asymmetric deterministic architecture to hunt for "clues" in the microsecond-level high-frequency transients just before death. Once it captures a sudden precursor that has "no obvious macroscopic anomalies but distinct faint signatures," it extracts this into a new feature library and feeds it back to the covariate panel of the Bianque System. While this doesn't guarantee interception in advance, it at least lays the most solid data collection and cognitive foundation for the infinite evolution of the Bianque System.
 
-## 💎 核心价值：投资回报率 (ROI) 的终极考验
-PART 3 的灵魂在于**“非侵入式算法炼金与极限资产榨取 (Non-invasive Algorithmic Alchemy and Extreme Asset Sweating)”**：
+## 💎 Core Value: The Ultimate Test of Return on Investment (ROI)
+The soul of PART 3 lies in **"Non-invasive Algorithmic Alchemy and Extreme Asset Sweating"**:
 
-1. **“零硬件追加”的工程铁律**: 主变压器极其娇贵，不能被当作小白鼠做实验。任何未经长期电网验证的新型侵入式传感器加装，都可能破坏其绝缘与密封，导致“为监测而引发击穿”的天大代价。本系统坚守纯粹的“非侵入式”底线，绝不新增任何物理传感器，完全复用绝对安全的常规采集数据（如 SCADA 负荷、DGA）。
-2. **监测“物理背离”，降维打击死阈值**: 传统运维只盯绝对死阈值（如温度没超 130 度就不管）。本系统捕捉的是深层的异常背离——例如“同样负荷下的 $\Delta T$ 异常升高”或“谐波 THD 诱发的不可逆热应力”。利用这些异常非平稳特征，将“坏或没坏”的定性判断，升维成精确的“什么时候坏”的定量倒计时。
-3. **将 RUL 作为筹码的极限资产榨取**: 掌握了精确的倒计时，RUL 就不再是简单的危险警告，而是可以用来交易和燃烧的“货币”。在系统设定绝对安全的第 9 档熔断底线前，系统支持 CFO 通过经济性过载或多资产负荷转移，最大幅度地消耗变压器的剩余使用时间以换取庞大的现金流收益，实现资产剩余价值的彻底榨干。
-
----
-
-## 1. 💡 核心理念 (Idea / Core Concept)
-**核心理念：从“被动防御阈值”走向“主动博弈剩余价值”。**
-将变压器面临的双重威胁（慢性热老化的“温水煮青蛙”与局部绝缘破损的“突发心搏骤停”）全部纳入多状态竞争生存模型。在无需投入任何硬件改造成本的前提下，依靠纯粹的数据算法推演，为最昂贵的配电资产赋予预知生死的生命计步器。
-
-## 2. 🎯 研究目标 (Research Objective)
-*   **统一双轨风险审计**: 在同一个六面镜诊断面板下，同时成功审计油浸式变压器的 DGA 化学累积特征与干式变压器的 $\Delta T$/THD/PD 物理特征。
-*   **高潮级的贝叶斯收敛验证**: 用真实的变压器失效数据集证明，从 P 点触发到 F 点崩溃的进程中，贝叶斯后验概率能够极其完美地压缩预测漏斗，实现“越靠近死亡，预测越精准”的数学奇迹。
-*   **极致的商业化决策引擎**: 提供一套无需人工干预的 PIDE 方程最优解。在保障绝对不发生非计划停机爆炸的前提下，精确指示何时进行干预（滤油、维修或退役），从而获取最大的经济账面净现值 (NPV)。
-
-## 3. 🛠️ 方法论 (Methodology)
-### 第一步：常规数据的“炼金”提取
-*   对油浸式：摄取标准的 DGA 历史样本时间序列。
-*   对干式：融合电流负荷、温升 $\Delta T$、电能质量 THD，提取出表征热疲劳的“异常升高特征斜率”作为时变协变量。
-
-### 第二步：集大成的 6-Mirror + 10-Decile 审计
-*   将协变量投入包括 Cox, Weibull, RSF 在内的 6 大生存模型盲选赛马。
-*   胜出曲线进入 10 档贝叶斯动态更新漏斗，实现随时间流逝的自适应精准校准。
-
-### 第三步：价值榨取与拉普拉斯闭环
-*   利用最优停止理论，在第 9 档红线之前执行所有产生正向现金流的延寿或过载操作。
-*   未截获的异常样本直接封存并传输至拉普拉斯平台，进入高频暂态分析生态。
-
-## 4. 🚀 预期成果 (Expected Outcomes)
-*   **最强算法管道**: 一个全方位兼容油浸/干式，且全盘复用存量基建数据的非侵入式生存分析平台。
-*   **学术巅峰证明**: 为“用纯软件数据榨取重资产最大剩余寿命”提供极具说服力的顶级数理证明。
-*   **终极自进化工业生态**: 确立《扁鹊系统》（治未病/渐进审计）与《拉普拉斯平台》（治已病/突发捕获）的无缝闭环架构。
-
-## 📂 目录结构 (Directory Structure)
-*   **[`data/`](./data/)**: 包含脱敏后的常规 DGA 时间序列记录、干式变压器负荷/THD/$\Delta T$ 历史曲线，以及拉普拉斯反哺的高危样本标识。
-*   **[`figures/`](./figures/)**: 包含六面镜生存模型赛马图、贝叶斯误差漏斗收缩过程图，以及多级经济干预阈值收益图。
-*   **[`scripts/`](./scripts/)**: 包含数据“炼金”预处理、P 点突变唤醒、10 档动态更新以及 PIDE 极值求解的核心 Python 引擎。
+1. **The Iron Law of "Zero Hardware Addition"**: Main transformers are extremely delicate and cannot be treated as lab rats. Any novel invasive sensor installation unverified by long-term grid operation could destroy their insulation and sealing, leading to the catastrophic cost of "breakdown induced by monitoring." This system adheres strictly to a pure "non-invasive" baseline, refusing to add any physical sensors, entirely repurposing absolutely safe conventional collected data (like SCADA loads, DGA).
+2. **Monitoring "Physical Divergence", Dimensionality Reduction on Hard Thresholds**: Traditional operations only stare at absolute hard thresholds (e.g., ignoring it if the temperature hasn't exceeded 130 degrees). This system captures deeper abnormal divergences—for instance, "abnormally elevated $\Delta T$ under the same load" or "irreversible thermal stress induced by harmonic THD." By utilizing these abnormal non-stationary features, the qualitative judgment of "broken or not broken" is dimensionally elevated into an accurate quantitative countdown of "when it will break."
+3. **Extreme Asset Sweating using RUL as a Bargaining Chip**: Equipped with a precise countdown, RUL is no longer just a simple danger warning, but a "currency" that can be traded and burned. Before hitting the system's defined Grade 9 fuse baseline of absolute safety, the system empowers the CFO, through economic overloading or multi-asset load transfer, to maximally consume the transformer's remaining lifespan in exchange for massive cash flow revenues, achieving complete extraction of the asset's residual value.
 
 ---
 
-## 🌌 终极哲学基调：真·仿生学与东方循环论的史诗交响
-本研究彻底超越了传统的电气工程学范畴，将重型工业资产的生命周期评估，升华至**生命科学**与**东方古典哲学**的至高维度。
+## 1. 💡 Core Concept
+**Core Concept: Transitioning from "Passive Threshold Defense" to "Active Game of Residual Value."**
+Both dual threats facing transformers (the "boiling frog" of chronic thermal aging and the "sudden cardiac arrest" of localized insulation breakdown) are incorporated into a multi-state competing survival model. Without incurring any hardware retrofitting costs, and relying purely on data algorithmic deductions, it endows the most expensive distribution assets with a life-pedometer capable of foreseeing survival and death.
 
-> **"万物并作，吾以观复。"** —— 老子《道德经·第十六章》
-> *(All things come into being, and I see thereby their return.)*
+## 2. 🎯 Research Objective
+*   **Unified Dual-Track Risk Auditing**: Under the same Six-Mirror diagnostic panel, successfully audit both the DGA chemical accumulation features of oil-immersed transformers and the $\Delta T$/THD/PD physical features of dry-type transformers simultaneously.
+*   **Climactic Bayesian Convergence Verification**: Use real transformer failure datasets to prove that during the progression from the Point P trigger to the Point F collapse, Bayesian posterior probabilities can perfectly compress the prediction funnel, achieving the mathematical miracle of "the closer to death, the more precise the prediction."
+*   **Ultimate Commercial Decision Engine**: Provide a set of optimal PIDE equations requiring zero human intervention. While ensuring absolutely no unplanned outage explosions, it precisely instructs when to intervene (oil filtering, maintenance, or retirement), thereby capturing the maximum economic Net Present Value (NPV).
 
-《扁鹊系统》并非在狂妄地改变机器的物理规律，而是在谦卑地**倾听与翻译宇宙底层的热力学熵增铁律**。我们拒绝机械论，将变压器视为有新陈代谢的生命机体：
-*   **生老病死与真·仿生学 (True Biomimetics)**：在这里，滤油不是冷冰冰的维护操作，而是机体的血液透析与新陈代谢；绝缘纸的降解不是简单的材料耗损，而是细胞端粒 (Telomere) 不可逆的生理性衰减。系统通过寻找“海弗里克极限 (Hayflick Limit)”所对应的经济交叉点（边际维修成本 > 边际运行收益），来从容宣判资产的生理学凋亡。
-*   **有无相生，生生不息 (The Endless Cycle)**：物理的钢铁躯体终归于无（退役报废），但在《扁鹊系统》与《拉普拉斯平台》的生态交织下，每一次哪怕未能成功预测的“突发暴毙”，都会在微秒级的高频暂态中留下弥足珍贵的遗骸数据。这些死亡数据（无）将被提取为全新的时变协变量基因反哺给系统，从而孕育出下一代更强的预测算法（有）。
+## 3. 🛠️ Methodology
+### Step 1: "Alchemy" Extraction of Conventional Data
+*   For Oil-Immersed: Ingest standard historical time-series samples of DGA.
+*   For Dry-Type: Fuse current load, temperature rise $\Delta T$, and power quality THD, extracting the "abnormal elevation feature slope" characterizing thermal fatigue as a time-varying covariate.
 
-物理的躯体终会消亡，但数字与算法的基因将在这个闭环生态中得到永生。这便是《扁鹊系统》三部曲的终极要义。
+### Step 2: Integrated 6-Mirror + 10-Decile Auditing
+*   Feed the covariates into a blind-test horse race of 6 major survival models, including Cox, Weibull, and RSF.
+*   The winning curve enters a 10-decile dynamic Bayesian updating funnel, achieving adaptive precision calibration over time.
+
+### Step 3: Value Sweating and Laplace Closed-Loop
+*   Leverage Optimal Stopping Theory to execute all life-extension or overloading operations that generate positive cash flow prior to the Grade 9 red line.
+*   Unintercepted abnormal samples are directly archived and transmitted to the Laplace Platform, entering the high-frequency transient analysis ecosystem.
+
+## 4. 🚀 Expected Outcomes
+*   **The Strongest Algorithmic Pipeline**: An omni-compatible (oil-immersed/dry-type) non-invasive survival analysis platform that fully repurposes existing infrastructure data.
+*   **Pinnacle Academic Proof**: Providing highly persuasive, top-tier mathematical proof for "using pure software data to sweat out the maximum remaining life of heavy assets."
+*   **Ultimate Self-Evolving Industrial Ecosystem**: Establishing a seamless closed-loop architecture between the "Bianque System" (preventive care / progressive auditing) and the "Laplace Platform" (treating the diseased / sudden failure capture).
+
+## 📂 Directory Structure
+*   **[`data/`](./data/)**: Contains desensitized routine DGA time-series records, dry-type transformer load/THD/$\Delta T$ historical curves, and high-risk sample markers fed back from Laplace.
+*   **[`figures/`](./figures/)**: Contains the Six-Mirror survival model horse race charts, the shrinking process diagram of the Bayesian error funnel, and multi-level economic intervention threshold yield charts.
+*   **[`scripts/`](./scripts/)**: Contains the core Python engine for data "alchemy" preprocessing, Point P sudden mutation awakening, 10-decile dynamic updating, and PIDE extrema solving.
+
+---
+
+## 🌌 Ultimate Philosophical Tone: An Epic Symphony of True Biomimetics and Eastern Cyclicality
+This research completely transcends the boundaries of traditional electrical engineering, elevating the life-cycle assessment of heavy industrial assets to the supreme dimensions of **life sciences** and **classical Eastern philosophy**.
+
+> **"All things come into being, and I see thereby their return."** —— Laozi, *Tao Te Ching (Chapter 16)*
+> *(万物并作，吾以观复。)*
+
+The "Bianque System" is not arrogantly trying to change the physical laws of machines, but humbly **listening to and translating the iron law of thermodynamic entropy increase at the base of the universe**. We reject mechanism, treating transformers as living organisms with metabolisms:
+*   **Life, Aging, Sickness, Death, and True Biomimetics**: Here, oil filtering is not a cold maintenance operation, but the body's hemodialysis and metabolism; the degradation of insulating paper is not mere material wear, but the irreversible physiological decay of cellular telomeres. The system calmly pronounces the asset's physiological apoptosis by finding the economic intersection corresponding to the "Hayflick Limit" (marginal maintenance cost > marginal operational revenue).
+*   **Existence and Non-existence Generating Each Other, an Endless Cycle**: The physical body of steel ultimately returns to nothingness (retirement and scrapping), but under the ecological intertwining of the "Bianque System" and the "Laplace Platform", every "sudden sudden-death"—even those successfully predicted—will leave behind precious relic data in microsecond-level high-frequency transients. These death data (non-existence) will be extracted into new time-varying covariate genes and fed back to the system, thus breeding the next generation of stronger predictive algorithms (existence).
+
+The physical body will inevitably perish, but the genes of data and algorithms will attain immortality in this closed-loop ecosystem. This is the ultimate essence of the "Bianque System" trilogy.
