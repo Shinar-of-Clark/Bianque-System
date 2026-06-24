@@ -149,6 +149,7 @@ In exploring the underlying survival algorithms for predictive maintenance of di
 ## 📚 References
 [1] Shadi, M. R., Mirshekali, H., Tahavori, M., & Shaker, H. R. (2026). Survival Models for Predictive Maintenance and Remaining Useful Life in Sensor-Enabled Smart Energy Networks: A Review. *Sensors*, 26(6), 1915. https://doi.org/10.3390/s26061915
 [2] Zeng, Y. (2026). From Causal Auditing to Value Maximization: Individualized Management Guidelines for Offshore Wind Assets (v1.0.0). *Zenodo*. https://doi.org/10.5281/zenodo.20391481
+[3] Shadi, M. R., Mortensen, L. K., Mirshekali, H., & Shaker, H. R. (2025). Proactive Cable Replacement Planning Using Neural Weibull Proportional Hazard Modeling and Bayesian Nested Monte Carlo Simulation Under Data Deficiencies. *IEEE Access*, 13, 167823–167836. https://doi.org/10.1109/ACCESS.2025.3613832
 
 ---
 
