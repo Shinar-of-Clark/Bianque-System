@@ -8,6 +8,18 @@
 
 ---
 
+<div align="center">
+
+### 📚 The Distribution Asset Trilogy
+
+| [🟢 PART 1: Underground Cables](./PART_1/PART_I_README.md) | [🟢 PART 2: Switchgear / CBs](./PART_2/PART_II_README.MD) | [🟢 PART 3: Power Transformers](./PART_3/PART_III_README.MD) |
+| :---: | :---: | :---: |
+| [📄 Manuscript PDF](./PART_1/Part_I_From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets—Underground_Cable_Management.pdf) <br> [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20676445-blue)](https://doi.org/10.5281/zenodo.20676445) | [📄 Manuscript PDF](./PART_2/From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Part_II_Switchgear_Management.pdf) <br> [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20751877-blue)](https://doi.org/10.5281/zenodo.20751877) | [📄 Manuscript PDF](./PART_3/From_Causal_Auditing_to_Value_Maximization_for_Core_Distribution_Assets_Part_III_Transformer_Management.pdf) <br> [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20811106-blue)](https://doi.org/10.5281/zenodo.20811106) |
+
+</div>
+
+---
+
 ## 📢 Latest Updates
 
 **[2026-06-23] Released PART 3: Power Transformers**
